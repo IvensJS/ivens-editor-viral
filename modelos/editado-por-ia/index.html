@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Editado por IA</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-700.woff2") format("woff2");font-weight:700;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-800.woff2") format("woff2");font-weight:800;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-900.woff2") format("woff2");font-weight:900;font-style:normal}
+@font-face{font-family:"Emoji";src:url("assets/fonts/seguiemj.ttf") format("truetype")}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Poppins",Arial,sans-serif}
+#shake{position:absolute;inset:0;will-change:transform}
+#vwrap{position:absolute;inset:0;transform-origin:400px 1000px;will-change:transform,filter}
+#clip{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#vin{position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse 75% 62% at 50% 50%,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 80%,rgba(0,0,0,.85) 100%)}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#ui{position:absolute;inset:0}
+
+/* texto padrão: branco com contorno preto */
+.tx{font-weight:900;-webkit-text-stroke:6px #000;paint-order:stroke fill;letter-spacing:-1px;line-height:1;
+  text-shadow:0 0 4px rgba(0,0,0,.9),0 4px 12px rgba(0,0,0,.75)}
+.y{color:#ffd60a}.r{color:#ff3b30}.g{color:#22dd22}
+
+/* legenda */
+.cap{position:absolute;left:40px;width:1000px;top:1380px;height:90px;display:flex;justify-content:center;align-items:center;
+  font-size:76px;text-transform:uppercase;white-space:nowrap;opacity:0;-webkit-text-stroke:5px #000}
+.cap span{margin:0 11px}
+
+/* letras flutuantes */
+.big{position:absolute;left:0;width:1080px;display:flex;flex-direction:column;align-items:center;opacity:0;text-transform:uppercase}
+.big .ln{display:flex;justify-content:center;white-space:nowrap}
+.big .w{display:inline-block;margin:0 14px;will-change:transform}
+.big .c{display:inline-block;will-change:transform}
+
+/* emojis e imagens */
+.emo{position:absolute;width:240px;height:240px;margin:-120px 0 0 -120px;display:flex;align-items:center;justify-content:center;
+  font-family:"Emoji",sans-serif;font-size:190px;line-height:1;opacity:0;
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,.55))}
+.img{position:absolute;width:300px;height:300px;margin:-150px 0 0 -150px;opacity:0;filter:drop-shadow(0 12px 22px rgba(0,0,0,.6))}
+.img img{width:100%;height:100%;object-fit:contain}
+
+/* CTA */
+#cta{position:absolute;left:60px;top:1415px;width:960px;height:132px;border-radius:28px;padding:0 18px 0 34px;display:flex;align-items:center;justify-content:space-between;opacity:0;
+  background:rgba(10,10,14,.6);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,.25);box-shadow:0 14px 34px rgba(0,0,0,.35)}
+#cta p{margin:0;font-weight:800;font-size:48px;line-height:1.1;letter-spacing:-.5px;-webkit-text-stroke:3px #000;paint-order:stroke fill}
+#cta .btn{height:88px;padding:0 36px;border-radius:44px;background:#0095f6;display:flex;align-items:center;font-weight:800;font-size:46px;white-space:nowrap}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="37.8" data-width="1080" data-height="1920">
+  <div id="shake"><div id="vwrap"><video id="clip" data-start="0" data-duration="37.8" data-track-index="0" src="assets/cut.mp4" muted playsinline></video></div></div>
+  <audio id="mix" data-start="0" data-duration="37.8" data-track-index="1" src="assets/mix.wav" data-volume="1"></audio>
+  <div id="vin"></div>
+  <div id="flash"></div>
+  <div id="ui" class="clip" data-start="0" data-duration="37.8" data-track-index="2">
+    <div id="caps"></div>
+    <div id="bigs"></div>
+    <div id="emos"></div>
+    <div id="cta"><p>Dica de edição<br>todo dia</p><div class="btn">+ Seguir</div></div>
+  </div>
+</div>
+<script>
+const DUR=37.8;
+const W=[["Se",0.06],["você",0.28],["não",0.76],["quer",1.0],["perder",1.2],["dinheiro",1.62],["precisa",2.2],["entender",2.68],["isso",3.22],["o",3.46],["quanto",3.62],["antes",4.08],
+["Você",4.87],["deve",5.49],["ter",5.81],["visto",6.01],["nos",6.33],["últimos",6.51],["dias",6.93],["o",7.39],["tanto",7.61],["de",8.09],["vídeo",8.31],["editados",8.81],["por",9.45],["IA",9.61],["que",9.89],["começou",10.01],["a",10.31],["aparecer",10.39],["no",10.89],["Instagram",10.99],
+["E",11.75],["sem",12.01],["brincadeira",12.25],["a",13.03],["qualidade",13.25],["está",13.93],["surreal",14.33],
+["inclusive",15.07],["esse",15.83],["vídeo",16.11],["que",16.33],["cê",16.43],["tá",16.59],["vendo",16.83],["foi",17.09],["editado",17.23],["pelo",17.67],["Claude",17.89],
+["Enquanto",18.56],["tem",19.22],["muita",19.36],["gente",19.7],["pensando",20.04],["se",20.66],["vale",20.78],["a",20.94],["pena",21.04],["utilizar",21.24],["já",22.1],["tem",22.24],["muitos",22.38],["empresários",22.66],["e",23.42],["empreendedores",23.48],["aproveitando",24.24],["da",24.9],["tecnologia",25.02],["pra",25.76],["ganhar",25.88],["tempo",26.22],
+["É",26.81],["normal",26.93],["na",27.41],["hora",27.55],["de",27.81],["editar",27.89],["gastar",28.41],["duas",28.75],["horas",29.03],["só",29.54],["que",29.72],["hoje",29.8],["em",30.02],["dia",30.2],["tá",30.44],["sendo",30.62],["menos",30.9],["de",31.2],["cinco",31.44],["minutos",31.76],
+["E",32.43],["se",32.61],["você",32.77],["não",33.21],["quer",33.39],["ficar",33.53],["pra",33.77],["trás",33.99],["já",34.57],["segue",34.83]];
+
+const tl=gsap.timeline({paused:true});
+const $=s=>document.querySelector(s);
+
+/* ---------- ZOOM que acompanha o rosto ---------- */
+// trechos do corte: [fonte, de, até, saída]
+const CUTS=[["m",2.58,7.39,0],["m",11.12,18.0,4.81],["m",21.56,24.9,11.69],["m",30.7,34.17,15.03],["m",37.9,46.15,18.5],["m",50.02,52.75,26.75],["m",52.84,55.73,29.48],["c",6.96,12.39,32.37]];
+// posição do rosto no bruto [tempo, x, y]
+const ROSTO={m:[[2.5,475,1026],[3,335,983],[3.5,351,972],[4,297,1000],[4.5,324,1000],[5,351,972],[5.5,351,975],[6,335,1050],[6.5,362,1026],[7,351,1053],[7.4,351,1050],
+[11,81,1026],[11.5,108,972],[12,243,945],[12.5,270,972],[13,459,1000],[13.5,486,972],[14,421,1000],[14.5,421,1000],[15,675,972],[15.5,729,972],[16,702,1026],[16.5,567,1000],[17,540,1026],[17.5,540,1000],[18,540,1000],
+[21.5,421,1026],[22,351,1000],[22.5,351,1000],[23,378,1026],[23.5,378,1026],[24,378,1053],[24.5,378,1026],[24.9,378,1026],
+[30.5,783,1296],[31,756,1107],[31.5,756,972],[32,756,972],[32.5,756,972],[33,702,972],[33.5,648,945],[34,594,945],[34.2,590,945],
+[37.8,162,1000],[38.3,459,972],[38.8,594,1000],[39.3,621,1000],[39.8,594,1000],[40.3,513,1000],[40.8,486,1000],[41.3,405,1000],[41.8,459,1000],[42.3,432,1000],[42.8,486,1053],[43.3,513,1053],[43.8,459,1026],[44.3,432,1053],[44.8,459,1053],[45.3,432,1026],[45.8,459,1026],[46.2,459,1026],
+[49.9,189,945],[50.4,216,972],[50.9,351,1080],[51.4,567,1053],[51.9,540,1026],[52.4,459,1000],[52.9,405,1000],[53.4,378,1000],[53.9,405,1026],[54.4,405,1000],[54.9,432,1026],[55.4,405,1026],[55.8,405,1026]],
+c:[[6.9,459,1000],[7.4,405,1000],[7.9,405,1000],[8.4,432,972],[8.9,486,972],[9.4,486,945],[9.9,486,945],[10.4,405,972],[10.9,405,972],[11.4,432,1026],[11.9,405,1026],[12.5,405,1026]]};
+function rostoEm(f,t){const p=ROSTO[f];if(t<=p[0][0])return p[0].slice(1);for(let i=1;i<p.length;i++){if(t<=p[i][0]){const a=p[i-1],b=p[i],k=(t-a[0])/(b[0]-a[0]);return[a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k]}}return p[p.length-1].slice(1)}
+const org=(x,y)=>Math.round(x)+'px '+Math.round(y)+'px';
+// origem do zoom FIXA em cada enquadramento (média do rosto no trecho): nada de origem andando, que faz a imagem balançar
+function origemFixa(a,b){
+  const c=CUTS.filter(([f,de,ate,out])=>a>=out-.001&&a<out+(ate-de))[0];
+  let sx=0,sy=0;const n=10;
+  for(let i=0;i<n;i++){const t=a+(b-a)*(i+.5)/n;const o=rostoEm(c[0],c[1]+Math.min(t-c[3],c[2]-c[1]));sx+=o[0];sy+=o[1];}
+  return org(sx/n,sy/n);
+}
+// enquadramentos: [início, fim, escala base, escala de entrada, escala no fim (empurrão) ou null, punch [tempo, escala] ou null]
+const SHOTS=[
+ [0.00,0.76,1.12,1.30,1.14,null],
+ [0.76,2.20,1.28,1.33,1.31,null],
+ [2.20,3.62,1.00,1.06,1.03,null],
+ [3.62,4.81,1.12,1.07,1.16,null],
+ [4.81,6.51,1.00,1.05,1.03,null],
+ [6.51,8.31,1.12,1.17,1.16,null],
+ [8.31,9.89,1.26,1.20,1.28,[9.61,1.34]],
+ [9.89,11.69,1.12,1.17,1.15,null],
+ [11.69,13.03,1.00,1.05,1.03,null],
+ [13.03,15.03,1.12,1.07,1.17,[14.33,1.30]],
+ [15.03,16.83,1.38,1.30,1.45,null],
+ [16.83,18.50,1.56,1.50,1.60,[17.89,1.70]],
+ [18.50,20.04,1.18,1.12,1.22,null],
+ [20.04,22.10,1.34,1.28,1.42,null],
+ [22.10,24.24,1.00,1.06,1.03,null],
+ [24.24,26.75,1.12,1.17,1.15,[25.88,1.28]],
+ [26.75,28.41,1.00,1.05,1.03,null],
+ [28.41,29.48,1.24,1.18,1.26,[28.75,1.32]],
+ [29.48,30.90,1.00,1.07,1.03,null],
+ [30.90,32.37,1.14,1.09,1.17,[31.44,1.32]],
+ [32.37,34.57,1.00,1.05,1.05,null],
+ [34.57,37.80,1.24,1.18,1.32,null]];
+SHOTS.forEach(([a,b,base,ent,fim,punch])=>{
+  const e=a===0?.3:.25;
+  tl.set('#vwrap',{scale:ent,transformOrigin:origemFixa(a,b)},a);
+  tl.to('#vwrap',{scale:base,duration:e,ease:'power2.out'},a);
+  const pt=punch?punch[0]:b;
+  if(pt-(a+e)>.05) tl.to('#vwrap',{scale:fim,duration:pt-(a+e),ease:'none'},a+e);
+  if(punch){tl.to('#vwrap',{scale:punch[1],duration:.15,ease:'power3.out'},pt);
+    if(b-pt-.15>.05) tl.to('#vwrap',{scale:punch[1]+.02,duration:b-pt-.15,ease:'none'},pt+.15);}
+});
+// sem tremidinha (o usuário não gostou): o impacto fica por conta do punch-in, do flash e do som
+
+/* ---------- EMOÇÃO: cor do vídeo ---------- */
+const F=(g,c,b,s,p,h)=>`grayscale(${g}) contrast(${c}) brightness(${b}) saturate(${s}) sepia(${p}) hue-rotate(${h}deg)`;
+const CLIMA={normal:F(0,1,1,1,0,0),tensao:F(1,1.22,.88,1,0,0),alegria:F(0,1.06,1.05,1.32,.08,0),frio:F(0,1,.92,.5,0,-10),urgencia:F(0,1.12,1,1.06,0,0)};
+const VIN={normal:0,tensao:1,alegria:0,frio:.55,urgencia:.25};
+// [tempo, clima, duração da transição]
+const CLIMAS=[[0,'tensao',0],[2.2,'normal',.15],[13.03,'alegria',.4],[15.03,'normal',.3],[18.5,'tensao',.35],[22.1,'normal',.3],[26.75,'frio',.35],[29.48,'alegria',.3],[32.37,'urgencia',.3]];
+CLIMAS.forEach(([t,c,d])=>{
+  if(d===0){tl.set('#vwrap',{filter:CLIMA[c]},t);tl.set('#vin',{opacity:VIN[c]},t);}
+  else{tl.to('#vwrap',{filter:CLIMA[c],duration:d,ease:'power1.inOut'},t);tl.to('#vin',{opacity:VIN[c],duration:d,ease:'power1.inOut'},t);}
+});
+// flash branco
+[[2.2,.55],[14.33,.6],[17.89,.45],[31.44,.6]].forEach(([t,o])=>tl.fromTo('#flash',{opacity:o},{opacity:0,duration:.18,ease:'power1.out',immediateRender:false},t));
+
+/* ---------- LEGENDA ---------- */
+// [primeira palavra, última, {índice: cor}]
+const CHUNKS=[[0,1],[2,3,{2:'r'}],[4,5],[6,7],[8,8],[9,11,{11:'y'}],[12,13],[14,15],[16,18],[19,21],[22,22,{22:'y'}],[23,25],[26,27],[28,29],[30,31,{31:'y'}],
+[32,34],[35,37,{36:'y'}],[38,38],[39,39],[40,41],[42,45],[46,47,{47:'y'}],[48,49,{49:'y'}],[50,51],[52,53],[54,54],[55,58],[59,59],[60,62],[63,63,{63:'g'}],[64,65,{65:'g'}],[66,66],[67,69,{68:'y'}],[70,71],
+[72,73],[74,75],[76,77,{77:'y'}],[78,78],[79,80],[81,83],[84,85],[86,87],[88,89,{88:'g'}],[90,91],[92,94],[95,96,{95:'r'}],[97,99,{99:'r'}],[100,101,{101:'y'}]];
+// legenda some quando entra letra grande ou o CTA
+const SEM_LEGENDA=[[0,2.2],[8.81,9.89],[14.33,15.03],[25.88,26.75],[28.75,29.48],[31.44,32.37],[35.07,99]];
+const limpa=s=>s.replace(/[.,!?]/g,'');
+const capsBox=$('#caps');
+CHUNKS.forEach(([i0,i1,cor],k)=>{
+  let a=W[i0][1]-.05;
+  let b=k+1<CHUNKS.length?W[CHUNKS[k+1][0]][1]-.05:DUR;
+  for(const [h0,h1] of SEM_LEGENDA){ if(a>=h0&&a<h1) a=h1; if(a<h0&&b>h0) b=h0; }
+  if(b-a<.12) return;
+  const el=document.createElement('div');el.className='cap tx';
+  let html='';for(let i=i0;i<=i1;i++){const c=cor&&cor[i]?cor[i]:'';html+=`<span class="${c}">${limpa(W[i][0])}</span>`;}
+  el.innerHTML=html;capsBox.appendChild(el);
+  tl.set(el,{opacity:1,scale:.92},a);tl.to(el,{scale:1,duration:.08,ease:'power2.out'},a);tl.set(el,{opacity:0},b);
+});
+
+/* ---------- LETRAS EM DESTAQUE ---------- */
+const bigs=$('#bigs');
+function big(id,top,linhas){ // linhas: [[texto, tamanho, classe]]
+  const el=document.createElement('div');el.className='big tx';el.id=id;el.style.top=top+'px';
+  el.innerHTML=linhas.map(([t,sz,c])=>`<div class="ln" style="font-size:${sz}px;-webkit-text-stroke:${Math.round(sz/18)}px #000">`+
+    t.split(' ').map(w=>`<span class="w ${c||''}">`+[...w].map(ch=>`<span class="c">${ch}</span>`).join('')+`</span>`).join('')+`</div>`).join('');
+  bigs.appendChild(el);return el;}
+function flutua(el,a,b){tl.to(el,{y:-12,duration:(b-a)/2,ease:'sine.inOut'},a);tl.to(el,{y:2,duration:(b-a)/2,ease:'sine.inOut'},a+(b-a)/2);}
+// 1) gancho: palavra por palavra no ritmo da fala
+const g1=big('b1',330,[['SE VOCÊ NÃO QUER',96,''],['PERDER DINHEIRO',104,'']]);
+g1.querySelectorAll('.w')[4].classList.add('r');g1.querySelectorAll('.w')[5].classList.add('y');
+tl.set(g1,{opacity:1},0);
+[...g1.querySelectorAll('.w')].forEach((w,i)=>tl.fromTo(w,{opacity:0,scale:.4,y:30},{opacity:1,scale:1,y:0,duration:.22,ease:'back.out(2.4)',immediateRender:true},[0.06,0.28,0.76,1.0,1.2,1.62][i]));
+flutua(g1,0,2.2);
+tl.to(g1,{opacity:0,scale:1.15,duration:.16,ease:'power2.in'},2.12);
+// 2) EDITADOS POR IA: palavra por palavra deslizando
+const g2=big('b2',360,[['EDITADOS POR',100,''],['IA',190,'y']]);
+tl.set(g2,{opacity:1},8.81);
+[...g2.querySelectorAll('.w')].forEach((w,i)=>tl.fromTo(w,{opacity:0,x:-90},{opacity:1,x:0,duration:.2,ease:'power3.out',immediateRender:true},[8.81,9.45,9.61][i]));
+flutua(g2,8.81,10.3);
+tl.to(g2,{opacity:0,duration:.15},10.25);
+// 3) SURREAL: letra por letra crescendo do centro
+const g3=big('b3',380,[['SURREAL',176,'y']]);
+tl.set(g3,{opacity:1},14.33);
+tl.fromTo(g3.querySelectorAll('.c'),{opacity:0,scale:2.2,y:-20},{opacity:1,scale:1,y:0,duration:.22,ease:'back.out(2)',stagger:.045,immediateRender:true},14.33);
+flutua(g3,14.33,15.6);
+tl.to(g3,{opacity:0,duration:.15},15.5);
+// 4) GANHAR TEMPO: entra de lado
+const g4=big('b4',380,[['GANHAR',112,''],['TEMPO',160,'g']]);
+tl.set(g4,{opacity:1},25.88);
+tl.fromTo(g4.querySelectorAll('.w')[0],{opacity:0,x:260},{opacity:1,x:0,duration:.22,ease:'power3.out',immediateRender:true},25.88);
+tl.fromTo(g4.querySelectorAll('.w')[1],{opacity:0,x:-260},{opacity:1,x:0,duration:.22,ease:'power3.out',immediateRender:true},26.2);
+flutua(g4,25.88,26.95);
+tl.to(g4,{opacity:0,duration:.15},26.85);
+// 5) 2 HORAS: letras caindo
+const g5=big('b5',390,[['2 HORAS',170,'r']]);
+tl.set(g5,{opacity:1},28.75);
+tl.fromTo(g5.querySelectorAll('.c'),{opacity:0,y:-120},{opacity:1,y:0,duration:.2,ease:'bounce.out',stagger:.04,immediateRender:true},28.75);
+flutua(g5,28.75,29.6);
+tl.to(g5,{opacity:0,duration:.12},29.46);
+// 6) MENOS DE 5 MINUTOS: payoff
+const g6=big('b6',330,[['MENOS DE',90,''],['5 MINUTOS',156,'g']]);
+tl.set(g6,{opacity:1},30.9);
+const w6=g6.querySelectorAll('.w');
+tl.fromTo(w6[0],{opacity:0,scale:.5},{opacity:1,scale:1,duration:.18,ease:'back.out(2)',immediateRender:true},30.9);
+tl.fromTo(w6[1],{opacity:0,scale:.5},{opacity:1,scale:1,duration:.18,ease:'back.out(2)',immediateRender:true},31.2);
+tl.fromTo(g6.querySelectorAll('.ln')[1].querySelectorAll('.c'),{opacity:0,scale:.2},{opacity:1,scale:1,duration:.2,ease:'back.out(3)',stagger:.035,immediateRender:true},31.44);
+flutua(g6,30.9,32.45);
+tl.to(g6,{opacity:0,duration:.15},32.3);
+
+/* ---------- EMOJIS E IMAGENS ---------- */
+const emos=$('#emos');
+function pop(el,a,b,rot){
+  tl.fromTo(el,{opacity:0,scale:.2,rotation:-rot},{opacity:1,scale:1,rotation:rot,duration:.3,ease:'back.out(2.2)',immediateRender:true},a);
+  tl.to(el,{y:-16,duration:(b-a-.3)/2,ease:'sine.inOut'},a+.3);tl.to(el,{y:0,duration:(b-a-.3)/2,ease:'sine.inOut'},a+.3+(b-a-.3)/2);
+  tl.to(el,{opacity:0,scale:.6,duration:.14,ease:'power2.in'},b);}
+function emoji(ch,x,y,a,b,rot){const el=document.createElement('div');el.className='emo';el.textContent=ch;el.style.left=x+'px';el.style.top=y+'px';emos.appendChild(el);pop(el,a,b,rot);}
+function imagem(src,x,y,a,b,rot,sz){const el=document.createElement('div');el.className='img';el.innerHTML=`<img src="${src}">`;el.style.left=x+'px';el.style.top=y+'px';
+  if(sz){el.style.width=el.style.height=sz+'px';el.style.margin=`-${sz/2}px 0 0 -${sz/2}px`;}emos.appendChild(el);pop(el,a,b,rot);}
+emoji('💸',830,760,1.62,2.75,12);
+imagem('assets/imagens/instagram.png',850,640,10.99,12.25,-8,290);
+imagem('assets/imagens/claude.png',250,700,17.89,18.95,10,280);
+emoji('🤔',250,760,20.04,21.3,-10);
+emoji('💼',850,760,22.66,23.9,10);
+
+/* ---------- CTA ---------- */
+tl.fromTo('#cta',{opacity:0,y:30,scale:.9},{opacity:1,y:0,scale:1,duration:.35,ease:'back.out(1.8)',immediateRender:true},34.83);
+tl.to('#cta .btn',{scale:1.1,duration:.16,ease:'power2.out'},36.1);
+tl.to('#cta .btn',{scale:1,duration:.45,ease:'elastic.out(1,.5)'},36.26);
+
+tl.set({}, {}, DUR);
+window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
+</script></body></html>

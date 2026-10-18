@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Na hora de gravar: flopado x viralizado</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-700.woff2") format("woff2");font-weight:700;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-800.woff2") format("woff2");font-weight:800;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-900.woff2") format("woff2");font-weight:900;font-style:normal}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Poppins",Arial,sans-serif}
+#clip{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#ui{position:absolute;inset:0}
+.st{-webkit-text-stroke:5px #000;paint-order:stroke fill;text-shadow:0 5px 0 rgba(0,0,0,.45)}
+
+#titulo{position:absolute;left:0;top:205px;width:1080px;text-align:center;font-weight:900;font-size:84px;line-height:1.05;letter-spacing:-1px}
+
+.etq{position:absolute;top:398px;max-width:460px;padding:16px 30px 18px;border-radius:26px;text-align:center;font-weight:900;font-size:64px;line-height:1.0;
+  box-shadow:0 10px 26px rgba(0,0,0,.3);will-change:transform,opacity}
+#etqL{left:270px;transform:translateX(-50%);background:#e5252a}
+#etqR{left:800px;transform:translateX(-50%);background:#12b81e}
+
+#leg{position:absolute;left:80px;top:1090px;width:920px;text-align:center;font-weight:800;font-size:64px;line-height:1.12;-webkit-text-stroke:5px #000}
+#leg span{position:absolute;left:0;top:0;width:920px;opacity:0;display:block}
+
+#cta{position:absolute;left:100px;top:1392px;width:880px;height:124px;border-radius:30px;padding:0 20px 0 34px;display:flex;align-items:center;justify-content:space-between;opacity:0;
+  background:rgba(10,10,14,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,.25);box-shadow:0 14px 34px rgba(0,0,0,.35)}
+#cta p{margin:0;font-weight:800;font-size:41px;line-height:1.1;-webkit-text-stroke:2px #000;paint-order:stroke fill}
+#cta .btn{height:84px;padding:0 34px;border-radius:42px;background:#0095f6;display:flex;align-items:center;font-weight:800;font-size:42px;white-space:nowrap}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="28.6" data-width="1080" data-height="1920">
+  <video id="clip" data-start="0" data-duration="28.6" data-track-index="0" src="assets/cut.mp4" muted playsinline></video>
+  <audio id="mix" data-start="0" data-duration="28.6" data-track-index="1" src="assets/mix.wav" data-volume="1"></audio>
+
+  <div id="ui" class="clip" data-start="0" data-duration="28.6" data-track-index="2">
+    <div id="titulo" class="st">NA HORA DE GRAVAR</div>
+    <div id="etqL" class="etq st">Vídeo<br>flopado</div>
+    <div id="etqR" class="etq st">Vídeo<br>viralizado</div>
+    <div id="leg" class="st"></div>
+    <div id="cta"><p>Segue pra gravar<br>vídeos que viralizam</p><div class="btn st">+ Seguir</div></div>
+  </div>
+</div>
+<script>
+// quem fala em cada trecho (B = flopado, esquerda; A = viralizado, direita)
+const TURNOS=[['B',0,1.80],['A',1.80,4.95],['B',4.95,9.32],['A',9.32,14.48],['B',14.48,16.33],['A',16.33,21.90],['B',21.90,23.80],['A',23.80,28.60]];
+const LEG=[
+  [0.12,1.80,'Oi, gente, tudo bem?'],
+  [1.88,3.58,'Os três segredos que ninguém'],[3.58,4.95,'te conta sobre...'],
+  [5.05,6.51,'Eu sou o Carlos,'],[6.59,8.13,'sou dono da Carlos Móveis'],[8.13,9.32,'há 15 anos.'],
+  [9.38,11.44,'Em 15 anos fazendo móveis,'],[11.44,12.78,'eu descobri esse erro que'],[12.78,14.48,'estraga toda a cozinha.'],
+  [14.58,16.33,'Ah, eu vou ser bem breve.'],
+  [16.41,18.23,'Em apenas 30 segundos,'],[18.23,19.41,'você vai descobrir o erro'],[19.41,20.63,'invisível que deixa o seu'],[20.63,21.90,'caixa no vermelho.'],
+  [21.97,23.80,'Espero que tenham gostado.'],
+  [23.88,25.24,'E pra aprender a gravar'],[25.24,27.04,'e editar vídeos que viralizam,'],[27.04,27.90,'já segue']
+];
+const CTA=27.28;
+
+const leg=document.getElementById('leg');
+LEG.forEach(function(l,i){const s=document.createElement('span');s.id='l'+i;s.textContent=l[2];leg.appendChild(s);});
+
+const tl=gsap.timeline({paused:true});
+
+// destaque sutil de quem fala
+TURNOS.forEach(function(t){
+  const on=t[0]==='B'?'#etqL':'#etqR', off=t[0]==='B'?'#etqR':'#etqL';
+  tl.to(on,{opacity:1,scale:1.04,duration:t[1]===0?0.01:.2,ease:'power2.out'},t[1]);
+  tl.to(off,{opacity:.55,scale:.96,duration:t[1]===0?0.01:.2,ease:'power2.out'},t[1]);
+});
+
+// legenda em pedaços
+LEG.forEach(function(l,i){
+  tl.fromTo('#l'+i,{opacity:0,scale:.92},{opacity:1,scale:1,duration:.12,ease:'power2.out'},l[0]);
+  tl.to('#l'+i,{opacity:0,duration:.08,ease:'none'},Math.max(l[0]+.15,l[1]-.08));
+});
+
+// CTA no fim
+tl.fromTo('#cta',{opacity:0,y:24,scale:.92},{opacity:1,y:0,scale:1,duration:.35,ease:'back.out(1.8)'},CTA);
+tl.fromTo('#cta .btn',{scale:1},{scale:1.08,duration:.16,ease:'power2.out'},CTA+.9);
+tl.to('#cta .btn',{scale:1,duration:.4,ease:'elastic.out(1,.5)'},CTA+1.06);
+
+window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
+</script></body></html>

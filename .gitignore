@@ -1,0 +1,11 @@
+# Senha do app (o servidor cria um novo com senha nova na primeira vez)
+config.json
+
+# Vídeos enviados, lista de edições e logs: ficam só no PC de quem usa
+dados/
+logs/
+*.log
+
+node_modules/
+.DS_Store
+Thumbs.db

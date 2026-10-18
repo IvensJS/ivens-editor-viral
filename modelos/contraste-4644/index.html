@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Leite condensado: usaria ou não usaria</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-700.woff2") format("woff2");font-weight:700;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-800.woff2") format("woff2");font-weight:800;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-900.woff2") format("woff2");font-weight:900;font-style:normal}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Poppins",Arial,sans-serif}
+#vwrap{position:absolute;inset:0;transform-origin:50% 34%;will-change:transform}
+#clip{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#ui{position:absolute;inset:0}
+
+#titulo{position:absolute;left:0;top:205px;width:1080px;text-align:center;font-weight:900;font-size:88px;line-height:1.05;letter-spacing:-1px;
+  -webkit-text-stroke:5px #000;paint-order:stroke fill;text-shadow:0 6px 0 rgba(0,0,0,.45)}
+
+.lado{position:absolute;top:995px;height:108px;padding:0 34px;border-radius:18px;display:flex;align-items:center;font-weight:800;font-size:64px;letter-spacing:.5px;white-space:nowrap;
+  -webkit-text-stroke:2.5px #000;paint-order:stroke fill;text-shadow:0 3px 0 rgba(0,0,0,.35);box-shadow:0 8px 22px rgba(0,0,0,.28);will-change:transform}
+#ladoL{left:80px;background:#12b81e;transform-origin:0% 50%}
+#ladoR{right:90px;background:#e5252a;transform-origin:100% 50%}
+
+.ex{position:absolute;left:310px;top:1118px;width:460px;height:460px;border-radius:22px;overflow:hidden;background:#fff;opacity:0;
+  box-shadow:0 14px 34px rgba(0,0,0,.35);will-change:transform}
+.ex img{width:100%;height:100%;object-fit:cover;display:block}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="22.7" data-width="1080" data-height="1920">
+  <div id="vwrap"><video id="clip" data-start="0" data-duration="22.7" data-track-index="0" src="assets/cut.mp4" muted playsinline></video></div>
+  <audio id="mix" data-start="0" data-duration="22.7" data-track-index="1" src="assets/mix.wav" data-volume="1"></audio>
+
+  <div id="ui" class="clip" data-start="0" data-duration="22.7" data-track-index="2">
+    <div id="titulo">LEITE CONDENSADO</div>
+    <div id="ladoL" class="lado">USARIA</div>
+    <div id="ladoR" class="lado">NÃO USARIA</div>
+    <div id="e1" class="ex"><img src="assets/produtos/1-moca-semi.png" alt=""></div>
+    <div id="e2" class="ex"><img src="assets/produtos/2-mococa.png" alt=""></div>
+    <div id="e3" class="ex"><img src="assets/produtos/3-itambe.png" alt=""></div>
+    <div id="e4" class="ex"><img src="assets/produtos/4-moca-integral.png" alt=""></div>
+    <div id="e5" class="ex"><img src="assets/produtos/5-piracanjuba.png" alt=""></div>
+  </div>
+</div>
+<script>
+const DUR=22.7;
+const tl=gsap.timeline({paused:true});
+
+// cortes em 4.65, 9.45, 15.05 e 18.90: zoom leve alternado, centrado no rosto
+const CUTS=[0,4.65,9.45,15.05,18.90,DUR];
+for(let i=0;i<CUTS.length-1;i++){
+  const s=i%2===0?1.0:1.05;
+  tl.set('#vwrap',{scale:s},CUTS[i]);
+  tl.to('#vwrap',{scale:s+0.02,duration:CUTS[i+1]-CUTS[i],ease:'none'},CUTS[i]);
+}
+
+// [id, aparece, veredito, lado: -1 = esquerda (USARIA), 1 = direita (NÃO USARIA)]
+const EX=[
+  ['#e1',0.12,1.62,1],   // Moça semidesnatado: não usaria
+  ['#e2',4.80,6.50,1],   // Mococa: não usaria
+  ['#e3',9.59,11.20,-1], // Itambé: usaria
+  ['#e4',15.17,16.20,-1],// Moça integral: usaria
+  ['#e5',18.98,20.05,-1] // Piracanjuba: usaria
+];
+EX.forEach(function(e){
+  const id=e[0], t=e[1], v=e[2], lado=e[3], lab=lado<0?'#ladoL':'#ladoR';
+  tl.fromTo(id,{opacity:0,scale:.7,x:0,rotation:0},{opacity:1,scale:1,duration:.3,ease:'back.out(2)'},t);
+  tl.fromTo(lab,{scale:1},{scale:1.1,duration:.12,ease:'power2.out'},v);
+  tl.to(lab,{scale:1,duration:.4,ease:'elastic.out(1,.5)'},v+.12);
+  tl.to(id,{x:lado*900,rotation:lado*10,duration:.46,ease:'power2.in'},v+.02);
+  tl.set(id,{opacity:0},v+.5);
+});
+
+window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
+</script></body></html>

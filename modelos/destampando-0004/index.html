@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Nunca grave assim</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-700.woff2") format("woff2");font-weight:700;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-800.woff2") format("woff2");font-weight:800;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-900.woff2") format("woff2");font-weight:900;font-style:normal}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Poppins",Arial,sans-serif}
+#vwrap{position:absolute;inset:0;transform-origin:50% 52%;will-change:transform}
+#clip{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#ui{position:absolute;inset:0}
+
+.ttl{position:absolute;top:1045px;height:96px;padding:0 20px;border-radius:7px;display:flex;align-items:center;font-weight:800;font-size:66px;line-height:1;letter-spacing:-1px;white-space:nowrap}
+#tL{left:92px;background:#e5252a}
+#tR{right:110px;background:#10b31a}
+
+.row{position:absolute;left:0;width:1080px;height:60px}
+.cell{position:absolute;top:0;height:60px;display:flex;align-items:center;white-space:nowrap}
+.cL{left:92px;width:443px;justify-content:flex-start;padding-left:6px}
+.cR{left:538px;width:432px;justify-content:flex-end;padding-right:6px}
+.cell span{display:inline-block;font-weight:700;font-size:46px;line-height:1;letter-spacing:-1px;-webkit-text-stroke:5px #000;paint-order:stroke fill;
+  text-shadow:0 0 3px rgba(0,0,0,.95),0 2px 8px rgba(0,0,0,.85),0 0 18px rgba(0,0,0,.45);will-change:transform}
+.cL span{transform-origin:0% 50%}.cR span{transform-origin:100% 50%}
+.tarja{position:absolute;inset:0;will-change:clip-path}
+.cL .tarja{background:#e5252a}.cR .tarja{background:#10b31a}
+
+#cta{position:absolute;left:100px;top:1472px;width:880px;height:92px;border-radius:26px;padding:0 18px 0 34px;display:flex;align-items:center;justify-content:space-between;opacity:0;
+  background:rgba(10,10,14,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,.25);box-shadow:0 14px 34px rgba(0,0,0,.35)}
+#cta p{margin:0;font-weight:800;font-size:34px;line-height:1.1;letter-spacing:-.5px}
+#cta .btn{height:68px;padding:0 30px;border-radius:34px;background:#0095f6;display:flex;align-items:center;font-weight:800;font-size:36px;white-space:nowrap}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="33.8" data-width="1080" data-height="1920">
+  <div id="vwrap"><video id="clip" data-start="0" data-duration="33.8" data-track-index="0" src="assets/cut.mp4" muted playsinline></video></div>
+  <audio id="mix" data-start="0" data-duration="33.8" data-track-index="1" src="assets/mix.wav" data-volume="1"></audio>
+
+  <div id="ui" class="clip" data-start="0" data-duration="33.8" data-track-index="2">
+    <div id="tL" class="ttl">NUNCA GRAVE</div>
+    <div id="tR" class="ttl">GRAVE</div>
+    <div id="rows"></div>
+    <div id="cta"><p>Segue pra mais dicas<br>de gravação</p><div class="btn">+ Seguir</div></div>
+  </div>
+</div>
+<script>
+const DUR=33.8;
+// [nunca, certo, sai vermelho, sai verde] (tempos no vídeo cortado)
+const PARES=[
+  ['Câmera frontal','Câmera traseira',0.85,2.48],
+  ['Contra a luz','Luz a favor',6.06,7.44],
+  ['Celular na mão','Celular no tripé',11.44,13.78],
+  ['Câmera suja','Lente limpa',18.14,19.70],
+  ['Cenário vazio','Com cenário',23.88,28.10]
+];
+const TOP=1158, H=60;
+const rows=document.getElementById('rows');
+PARES.forEach(function(p,i){
+  const r=document.createElement('div');r.className='row';r.style.top=(TOP+i*H)+'px';
+  r.innerHTML='<div class="cell cL" id="L'+i+'"><span>'+p[0]+'</span><div class="tarja"></div></div>'+
+              '<div class="cell cR" id="R'+i+'"><span>'+p[1]+'</span><div class="tarja"></div></div>';
+  rows.appendChild(r);
+});
+
+const tl=gsap.timeline({paused:true});
+
+// cortes em 5.16, 10.36, 16.84, 22.58 e 30.70: zoom leve alternado pra disfarçar o pulo
+const CUTS=[0,5.16,10.36,16.84,22.58,30.70,DUR];
+for(let i=0;i<CUTS.length-1;i++){
+  const s=i%2===0?1.0:1.05;
+  tl.set('#vwrap',{scale:s},CUTS[i]);
+  tl.to('#vwrap',{scale:s+0.02,duration:CUTS[i+1]-CUTS[i],ease:'none'},CUTS[i]);
+}
+
+// tarjas: a vermelha recolhe pra esquerda, a verde pra direita
+PARES.forEach(function(p,i){
+  tl.fromTo('#L'+i+' .tarja',{clipPath:'inset(0% 0% 0% 0%)'},{clipPath:'inset(0% 100% 0% 0%)',duration:.36,ease:'power2.inOut'},p[2]);
+  tl.fromTo('#L'+i+' span',{scale:.96},{scale:1,duration:.3,ease:'power2.out'},p[2]+.06);
+  tl.fromTo('#R'+i+' .tarja',{clipPath:'inset(0% 0% 0% 0%)'},{clipPath:'inset(0% 0% 0% 100%)',duration:.36,ease:'power2.inOut'},p[3]);
+  tl.fromTo('#R'+i+' span',{scale:.96},{scale:1.04,duration:.2,ease:'power2.out'},p[3]+.08);
+  tl.to('#R'+i+' span',{scale:1,duration:.3,ease:'power2.inOut'},p[3]+.28);
+});
+
+// CTA gravado separado, no final
+tl.fromTo('#cta',{opacity:0,y:24,scale:.92},{opacity:1,y:0,scale:1,duration:.35,ease:'back.out(1.8)'},30.85);
+tl.fromTo('#cta .btn',{scale:1},{scale:1.08,duration:.16,ease:'power2.out'},32.55);
+tl.to('#cta .btn',{scale:1,duration:.4,ease:'elastic.out(1,.5)'},32.71);
+
+window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
+</script></body></html>

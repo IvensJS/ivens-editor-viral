@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Tá sem grana? Vai nesse</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Lilita One";src:url("assets/fonts/lilita-one.ttf") format("truetype");font-weight:400;font-style:normal}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Lilita One","Segoe UI",Arial,sans-serif;font-weight:400}
+#vwrap{position:absolute;inset:0;transform-origin:50% 0%;will-change:transform}
+#clip{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#ui{position:absolute;inset:0}
+
+/* texto branco com contorno preto, igual à referência */
+.txt{color:#fff;-webkit-text-stroke:5px #000;paint-order:stroke fill;text-shadow:0 5px 0 rgba(0,0,0,.55)}
+
+.col{position:absolute;top:225px;width:470px}
+#colL{left:40px}#colR{left:570px}
+.label{position:relative;height:112px;border-radius:30px;display:flex;align-items:center;justify-content:center;font-size:76px;line-height:1;letter-spacing:1px;box-shadow:0 8px 22px rgba(0,0,0,.28);will-change:transform}
+#colL .label{background:#ff1f1f}#colR .label{background:#22dd22}
+
+.prod{position:absolute;left:0;top:132px;width:470px;opacity:0;will-change:transform;transform-origin:50% 40%}
+.photo{position:relative;margin:0 auto;width:380px;height:380px;border-radius:24px;background:#fff;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.30)}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tag{position:relative;margin-top:-18px;width:470px;min-height:118px;border-radius:28px;padding:10px 14px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+#colL .tag{background:#ff1f1f}#colR .tag{background:#22dd22}
+.tag .nm{font-size:51px;line-height:1.02;letter-spacing:.2px;white-space:nowrap}
+.tag .pr{font-size:68px;line-height:1.02;letter-spacing:.5px}
+
+#cta{position:absolute;left:90px;top:380px;width:900px;padding:40px 44px 46px;border-radius:44px;text-align:center;opacity:0;
+  background:rgba(10,10,14,.46);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:2px solid rgba(255,255,255,.28);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+#cta p{margin:0;font-size:72px;line-height:1.08}
+#cta .btn{display:inline-flex;align-items:center;gap:14px;margin-top:30px;height:104px;padding:0 54px;border-radius:52px;background:#0095f6;font-size:62px;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="20.4" data-width="1080" data-height="1920">
+  <div id="vwrap"><video id="clip" data-start="0" data-duration="20.4" data-track-index="0" src="assets/cut.mp4" muted playsinline></video></div>
+  <audio id="mix" data-start="0" data-duration="20.4" data-track-index="1" src="assets/mix.wav" data-volume="1"></audio>
+
+  <div id="ui" class="clip" data-start="0" data-duration="20.4" data-track-index="2">
+    <div id="colL" class="col">
+      <div class="label txt">TÁ SEM $$?</div>
+      <div id="c1" class="prod"><div class="photo"><img src="assets/produtos/troca1-caro.png" alt=""></div><div class="tag txt"><div class="nm">CapCut Pro</div><div class="pr">R$66/MÊS</div></div></div>
+      <div id="c2" class="prod"><div class="photo"><img src="assets/produtos/troca2-caro.png" alt=""></div><div class="tag txt"><div class="nm">Hollyland Lark M2</div><div class="pr">R$640</div></div></div>
+      <div id="c3" class="prod"><div class="photo"><img src="assets/produtos/troca3-caro.png" alt=""></div><div class="tag txt"><div class="nm">Softbox</div><div class="pr">R$250</div></div></div>
+    </div>
+    <div id="colR" class="col">
+      <div class="label txt">VAI NESSE!</div>
+      <div id="b1" class="prod"><div class="photo"><img src="assets/produtos/troca1-barato.png" alt=""></div><div class="tag txt"><div class="nm">Edits</div><div class="pr">GRÁTIS</div></div></div>
+      <div id="b2" class="prod"><div class="photo"><img src="assets/produtos/troca2-barato.png" alt=""></div><div class="tag txt"><div class="nm">Hollyland Lark A1</div><div class="pr">R$427</div></div></div>
+      <div id="b3" class="prod"><div class="photo"><img src="assets/produtos/troca3-barato.png" alt=""></div><div class="tag txt"><div class="nm">Luz do sol</div><div class="pr">GRÁTIS</div></div></div>
+    </div>
+
+    <div id="cta"><p class="txt">Segue pra mais dicas<br>que economizam</p><div class="btn txt">+ Seguir</div></div>
+  </div>
+</div>
+<script>
+const DUR=20.4;
+const tl=gsap.timeline({paused:true});
+
+// cortes em 4.49 e 10.76: troca de zoom leve pra disfarçar o pulo, com empurrão lento
+tl.fromTo('#vwrap',{scale:1},{scale:1.02,duration:4.49,ease:'none'},0);
+tl.set('#vwrap',{scale:1.06},4.49);
+tl.to('#vwrap',{scale:1.08,duration:10.76-4.49,ease:'none'},4.49);
+tl.set('#vwrap',{scale:1.0},10.76);
+tl.to('#vwrap',{scale:1.03,duration:DUR-10.76,ease:'none'},10.76);
+
+// produto entra quando a mão aponta pra cima daquele lado
+function pop(id,col,t){
+  tl.fromTo(id,{opacity:0,scale:.6},{opacity:1,scale:1,duration:.3,ease:'back.out(2.2)'},t);
+  tl.fromTo(col+' .label',{scale:1},{scale:1.07,duration:.1,ease:'power2.out'},t);
+  tl.to(col+' .label',{scale:1,duration:.35,ease:'elastic.out(1,.5)'},t+.1);
+}
+function out(id,t){ tl.to(id,{opacity:0,scale:.6,duration:.2,ease:'power2.in'},t); }
+
+// [caro, barato, entra caro, entra barato, sai]
+[['#c1','#b1',0.35,2.15,4.38],
+ ['#c2','#b2',4.62,7.50,10.72],
+ ['#c3','#b3',10.95,13.45,17.24]].forEach(function(r){
+  pop(r[0],'#colL',r[2]);
+  pop(r[1],'#colR',r[3]);
+  out(r[0],r[4]); out(r[1],r[4]);
+});
+
+// CTA no final ("E pra aprender mais dicas...")
+tl.fromTo('#cta',{opacity:0,scale:.75,y:30},{opacity:1,scale:1,y:0,duration:.35,ease:'back.out(1.8)'},17.40);
+tl.fromTo('#cta .btn',{scale:1},{scale:1.08,duration:.18,ease:'power2.out'},18.90);
+tl.to('#cta .btn',{scale:1,duration:.4,ease:'elastic.out(1,.5)'},19.08);
+
+window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
+</script></body></html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Avaliação: equipamentos pra gravar no celular</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-700.woff2") format("woff2");font-weight:700;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-800.woff2") format("woff2");font-weight:800;font-style:normal}
+@font-face{font-family:"Poppins";src:url("assets/fonts/poppins-900.woff2") format("woff2");font-weight:900;font-style:normal}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:"Poppins",Arial,sans-serif}
+#vwrap{position:absolute;inset:0;transform-origin:50% 50%;will-change:transform}
+#clip{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
+#ui{position:absolute;inset:0}
+.st{-webkit-text-stroke:5px #000;paint-order:stroke fill;text-shadow:0 5px 0 rgba(0,0,0,.45)}
+
+.titulo{position:absolute;left:60px;top:190px;width:960px;text-align:center;font-weight:900;font-size:76px;line-height:1.05;letter-spacing:-1px;opacity:0}
+
+.nivel{position:absolute;top:398px;width:250px;height:112px;margin-left:-125px;border-radius:24px;box-shadow:0 8px 22px rgba(0,0,0,.3);opacity:.75;will-change:transform,opacity}
+.nivel span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:40px;line-height:1.02;
+  -webkit-text-stroke:3.5px #000;paint-order:stroke fill;text-shadow:0 3px 0 rgba(0,0,0,.35);opacity:0}
+.nivel span.g{font-size:54px}
+.nivel span.m{font-size:33px}
+#nV{left:200px;background:#12b81e}
+#nA{left:460px;background:#ffcc00}
+#nR{left:730px;background:#e5252a}
+
+.prod{position:absolute;top:528px;width:250px;height:250px;margin-left:-125px;opacity:0;will-change:transform}
+.prod img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 2px rgba(255,255,255,.9)) drop-shadow(0 10px 14px rgba(0,0,0,.55))}
+.prod.foto img{object-fit:cover;border-radius:26px;border:4px solid #fff;filter:drop-shadow(0 10px 14px rgba(0,0,0,.55))}
+.prod .brilho{position:absolute;inset:-20px;border-radius:50%;opacity:0}
+.V{left:200px}.A{left:460px}.R{left:730px}
+.V .brilho{background:radial-gradient(circle,rgba(18,184,30,.55),transparent 65%)}
+.A .brilho{background:radial-gradient(circle,rgba(255,204,0,.55),transparent 65%)}
+.R .brilho{background:radial-gradient(circle,rgba(229,37,42,.55),transparent 65%)}
+
+#cta{position:absolute;left:100px;top:1400px;width:880px;height:124px;border-radius:30px;padding:0 20px 0 34px;display:flex;align-items:center;justify-content:space-between;opacity:0;
+  background:rgba(10,10,14,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:2px solid rgba(255,255,255,.25);box-shadow:0 14px 34px rgba(0,0,0,.35)}
+#cta p{margin:0;font-weight:800;font-size:40px;line-height:1.1;-webkit-text-stroke:2px #000;paint-order:stroke fill}
+#cta .btn{height:84px;padding:0 34px;border-radius:42px;background:#0095f6;display:flex;align-items:center;font-weight:800;font-size:42px;white-space:nowrap}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="19.2" data-width="1080" data-height="1920">
+  <div id="vwrap"><video id="clip" data-start="0" data-duration="19.2" data-track-index="0" src="assets/cut.mp4" muted playsinline></video></div>
+  <audio id="mix" data-start="0" data-duration="19.2" data-track-index="1" src="assets/mix.wav" data-volume="1"></audio>
+
+  <div id="ui" class="clip" data-start="0" data-duration="19.2" data-track-index="2">
+    <div id="titulos"></div>
+    <div id="nV" class="nivel"></div>
+    <div id="nA" class="nivel"></div>
+    <div id="nR" class="nivel"></div>
+    <div id="prods"></div>
+    <div id="cta"><p>Segue pra não comprar<br>equipamento errado</p><div class="btn st">+ Seguir</div></div>
+  </div>
+</div>
+<script>
+// [título, [verde, amarelo, vermelho] (texto, classe), [fotos verde, amarelo, vermelho], [notas], início, fim]
+const RODADAS=[
+  {t:'Microfones sem fio pra gravar no celular', n:[['VALE CADA<br>CENTAVO',''],['DÁ PRO<br>GASTO',''],['NÃO<br>COMPRARIA','']],
+   p:['lark-m2.png','boya-v10.png','dji-mic2.png'], v:[0.19,2.37,3.89], ini:0, fim:4.95},
+  {t:'Suportes pra gravar com o celular', n:[['VALE CADA<br>CENTAVO',''],['DÁ PRO<br>GASTO',''],['NÃO<br>COMPRARIA','']],
+   p:['tripe.png','gimbal.png','pau-selfie.png'], v:[5.20,6.56,7.58], ini:4.95, fim:8.75},
+  {t:'Apps pra editar vídeo no celular', n:[['ÓTIMO','g'],['BOM','g'],['RUIM','g']],
+   p:['edits.png','capcut.png','inshot.png'], v:[8.94,10.48,11.50], ini:8.75, fim:12.20},
+  {t:'Iluminação pra gravar vídeo', n:[['PROFISSIONAL','m'],['QUEBRA-<br>GALHO',''],['RUIM','g']],
+   p:['janela.png','painel.png','ringlight.png'], foto:[true,false,false], v:[12.37,13.57,15.09], ini:12.20, fim:15.60}
+];
+const COL=['V','A','R'], NIV=['#nV','#nA','#nR'];
+
+const titulos=document.getElementById('titulos'), prods=document.getElementById('prods');
+RODADAS.forEach(function(r,i){
+  const t=document.createElement('div');t.className='titulo st';t.id='t'+i;t.textContent=r.t;titulos.appendChild(t);
+  r.n.forEach(function(n,j){const s=document.createElement('span');s.id='n'+i+'_'+j;if(n[1])s.className=n[1];s.innerHTML=n[0];document.querySelector(NIV[j]).appendChild(s);});
+  r.p.forEach(function(src,j){const d=document.createElement('div');d.className='prod '+COL[j]+((r.foto&&r.foto[j])?' foto':'');d.id='p'+i+'_'+j;
+    d.innerHTML='<div class="brilho"></div><img src="assets/produtos/'+src+'" alt="">';prods.appendChild(d);});
+});
+
+const tl=gsap.timeline({paused:true});
+
+// zoom leve alternado nos cortes entre rodadas
+const CUTS=[0,4.95,8.75,12.20,15.60,19.2];
+for(let i=0;i<CUTS.length-1;i++){const s=i%2===0?1:1.05;tl.set('#vwrap',{scale:s},CUTS[i]);tl.to('#vwrap',{scale:s+0.02,duration:CUTS[i+1]-CUTS[i],ease:'none'},CUTS[i]);}
+
+RODADAS.forEach(function(r,i){
+  const ini=r.ini, ultima=i===RODADAS.length-1;
+  // título e nomes dos níveis da rodada
+  tl.fromTo('#t'+i,{opacity:0,y:-16},{opacity:1,y:0,duration:i===0?0.01:.25,ease:'power2.out'},ini);
+  r.n.forEach(function(_,j){tl.fromTo('#n'+i+'_'+j,{opacity:0},{opacity:1,duration:i===0?0.01:.2},ini);});
+  NIV.forEach(function(nv){tl.to(nv,{opacity:.75,duration:.15},ini);});
+  // produto entra na nota
+  r.v.forEach(function(t,j){
+    const p='#p'+i+'_'+j;
+    tl.fromTo(p,{opacity:0,scale:.6},{opacity:1,scale:1,duration:.3,ease:'back.out(2.2)'},t);
+    tl.fromTo(p+' .brilho',{opacity:0,scale:.6},{opacity:1,scale:1.1,duration:.15,ease:'power2.out'},t);
+    tl.to(p+' .brilho',{opacity:0,duration:.45,ease:'power2.in'},t+.15);
+    tl.to(NIV[j],{opacity:1,scale:1.08,duration:.12,ease:'power2.out'},t);
+    tl.to(NIV[j],{scale:1,duration:.4,ease:'elastic.out(1,.5)'},t+.12);
+  });
+  // quadro limpa no fim da rodada (a última fica até o CTA, depois limpa também)
+  const fim=r.fim;
+  r.p.forEach(function(_,j){tl.to('#p'+i+'_'+j,{opacity:0,scale:.7,duration:.2,ease:'power2.in'},fim-.2);});
+  tl.to('#t'+i,{opacity:0,duration:.18},fim-.18);
+  r.n.forEach(function(_,j){tl.to('#n'+i+'_'+j,{opacity:0,duration:.15},fim-.15);});
+  // depois da última rodada o quadro inteiro sai e o CTA fica sozinho
+  if(ultima){NIV.forEach(function(nv){tl.to(nv,{opacity:0,scale:.9,duration:.2,ease:'power2.in'},fim-.2);});}
+});
+
+// CTA
+tl.fromTo('#cta',{opacity:0,y:24,scale:.92},{opacity:1,y:0,scale:1,duration:.35,ease:'back.out(1.8)'},15.75);
+tl.fromTo('#cta .btn',{scale:1},{scale:1.08,duration:.16,ease:'power2.out'},17.75);
+tl.to('#cta .btn',{scale:1,duration:.4,ease:'elastic.out(1,.5)'},17.91);
+
+window.__timelines=window.__timelines||{};window.__timelines['main']=tl;
+</script></body></html>

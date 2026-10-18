@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F2F7">
+<title>Editor Viral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app">
+  <header class="topo">
+    <div class="marca">Editor <span>Viral</span></div>
+    <div class="passos" id="passos" hidden><i></i><i></i><i></i></div>
+  </header>
+
+  <!-- Login -->
+  <section class="tela" id="tela-login" hidden>
+    <h1>Entrar</h1>
+    <p class="sub">Digite a senha do Editor Viral. Ela aparece na janela preta que abriu no PC.</p>
+    <form id="form-login" class="cartao">
+      <label class="campo"><span>Senha</span>
+        <input id="senha" type="password" inputmode="numeric" autocomplete="current-password" required></label>
+      <p class="aviso-erro" id="login-erro" hidden></p>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+  </section>
+
+  <!-- Tela 1 -->
+  <section class="tela" id="tela-formato" hidden>
+    <p class="etiqueta">Passo 1 de 3</p>
+    <h1>Qual formato você gravou?</h1>
+    <div class="formatos" id="lista-formatos"></div>
+    <div class="rodape"><button class="btn" id="ir-briefing" disabled>Continuar</button></div>
+  </section>
+
+  <!-- Tela 2 -->
+  <section class="tela" id="tela-briefing" hidden>
+    <p class="etiqueta">Passo 2 de 3 <b id="b-formato"></b></p>
+    <h1>Conta sobre o vídeo</h1>
+    <form id="form-briefing" class="cartao">
+      <label class="campo"><span>Seu nicho</span>
+        <input id="nicho" placeholder="Ex: confeitaria" required></label>
+      <label class="campo"><span>Sobre o que é o vídeo</span>
+        <textarea id="sobre" rows="3" placeholder="Ex: os 5 melhores leites condensados pra pudim" required></textarea></label>
+      <div id="campos-formato"></div>
+      <label class="chave" id="linha-sons"><input type="checkbox" id="sons" checked><span class="trilho"></span><span>Efeitos sonoros</span></label>
+    </form>
+    <div class="rodape duplo">
+      <button class="btn claro" data-voltar="tela-formato">Voltar</button>
+      <button class="btn" id="ir-upload">Continuar</button>
+    </div>
+  </section>
+
+  <!-- Tela 3 -->
+  <section class="tela" id="tela-upload" hidden>
+    <p class="etiqueta">Passo 3 de 3 <b id="u-formato"></b></p>
+    <h1>Manda o vídeo gravado</h1>
+    <div id="lista-uploads"></div>
+    <div class="cartao dicas">
+      <h2>Confere se você gravou assim</h2>
+      <ul id="lista-dicas"></ul>
+    </div>
+    <p class="aviso-erro" id="upload-erro" hidden></p>
+    <div class="rodape duplo">
+      <button class="btn claro" data-voltar="tela-briefing">Voltar</button>
+      <button class="btn" id="editar" disabled>Editar meu vídeo</button>
+    </div>
+  </section>
+
+  <!-- Tela 4 -->
+  <section class="tela escura" id="tela-editando" hidden>
+    <p class="etiqueta">Editando</p>
+    <h1 id="ed-titulo">Editando seu vídeo</h1>
+    <p class="sub" id="ed-sub">Pode deixar essa tela aberta. Leva uns 15 a 30 minutos.</p>
+    <div class="barra"><div id="ed-barra"></div></div>
+    <ol class="etapas" id="ed-etapas"></ol>
+
+    <div class="cartao pergunta" id="ed-pergunta" hidden>
+      <h2>Preciso de uma ajuda sua</h2>
+      <p id="ed-pergunta-texto"></p>
+      <pre id="ed-pergunta-detalhe" hidden></pre>
+      <label class="campo"><span>Sua resposta</span><textarea id="ed-resposta" rows="3" placeholder="Ex: tá certo, pode seguir"></textarea></label>
+      <button class="btn limao" id="ed-responder">Responder e continuar</button>
+    </div>
+
+    <div class="cartao falha" id="ed-erro" hidden>
+      <h2>Ops, travou aqui</h2>
+      <p id="ed-erro-texto"></p>
+      <button class="btn limao" id="ed-tentar">Tentar de novo</button>
+      <button class="btn link" data-novo>Fazer outro vídeo</button>
+    </div>
+  </section>
+
+  <!-- Tela 5 -->
+  <section class="tela" id="tela-pronto" hidden>
+    <p class="etiqueta destaque">Pronto</p>
+    <h1>Seu vídeo tá pronto!</h1>
+    <div class="player"><video id="final" controls playsinline preload="metadata"></video></div>
+    <p class="sub" id="pr-resumo"></p>
+    <a class="btn" id="baixar" href="#">Baixar vídeo</a>
+    <button class="btn claro" id="abrir-ajuste">Pedir um ajuste</button>
+    <form class="cartao" id="form-ajuste" hidden>
+      <label class="campo"><span>O que você quer mudar?</span>
+        <textarea id="ajuste" rows="3" placeholder="Ex: o nome do 2º lugar tá errado, é Itambé"></textarea></label>
+      <p class="sub pequeno" id="ajustes-restantes"></p>
+      <button class="btn" type="submit">Mandar ajuste</button>
+    </form>
+    <button class="btn link" data-novo>Fazer outro vídeo</button>
+  </section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
