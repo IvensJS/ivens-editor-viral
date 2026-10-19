@@ -164,4 +164,19 @@ Ao terminar, mande uma mensagem curta com:
 - A tabela do ranking (posição, item, momento em que entra), e se o vídeo foi todo com foto ou todo em texto com emoji (e por quê)
 - Checklist antes de postar: assistir com som, conferir os nomes e as posições, escolher uma música em alta no app
 - Sugestão de legenda pro post, puxando comentário sobre o 1º lugar
+- Se teve ajuste nesta edição, a regra sugerida pra salvar na skill (ver "Lições aprendidas")
 - Pergunta se quer algum ajuste
+
+## Lições aprendidas
+Regras que vieram de ajustes pedidos pelo usuário em vídeos reais. Valem por cima do que está escrito acima, só neste formato (cada formato tem a própria lista): leia antes de começar e siga sempre.
+
+Como funciona, no fim de toda edição:
+1. Se nesta edição o usuário pediu algum ajuste, ou você teve que corrigir algo que a skill não previa (na revisão do rascunho, um erro, um caso novo), escreva a regra em uma linha: geral e clara (o que fazer ou não fazer e por quê), sem citar o vídeo. Se ela só vale numa situação, escreva a condição junto (ex: "quando a pessoa estiver longe da câmera, o título desce").
+2. Mostre a regra pro usuário e pergunte duas coisas: se pode salvar e se ela vale só pra este formato ou pra todos. Só grave com o ok dele.
+3. Com o ok: se a regra muda algo que já está escrito na skill, corrija aquele trecho também (pra não ficarem duas regras brigando) e anote aqui; se for nova, só acrescente aqui. Formato: `- AAAA-MM-DD: regra (motivo)`. Se valer pra todos os formatos, grave em todas as skills agente-video-* (adaptando ao jeito de cada formato, e só onde fizer sentido) e marque "(vale pra todos)".
+4. Se não der pra editar a skill (por exemplo, rodando no Editor Viral, que não deixa mexer nas skills), grave a sugestão no arquivo editor/licoes.md do projeto, com o alcance sugerido, pra revisar depois.
+5. Se nada precisou de ajuste, não grave nada.
+6. Arrumação: quando esta lista passar de 10 regras, junte as parecidas e passe pro corpo da skill as que já viraram padrão (corrigindo o trecho certo), tirando daqui. Mostre o antes e o depois pro usuário e só grave com o ok dele.
+
+Regras salvas:
+- (nenhuma ainda)
