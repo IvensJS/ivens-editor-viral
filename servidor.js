@@ -15,6 +15,7 @@ const { FORMATOS, formatosPublicos } = require('./formatos');
 const HOME = os.homedir();
 const RAIZ = __dirname;
 const PUBLIC = path.join(RAIZ, 'public');
+const SKILLS_APP = path.join(RAIZ, 'skills'); // as skills que vêm com o app (Jeito 2)
 const DADOS = process.env.EV_DADOS || path.join(RAIZ, 'dados');
 const UPLOADS = path.join(DADOS, 'uploads');
 const LOGS = path.join(RAIZ, 'logs');
@@ -151,31 +152,45 @@ function linhasBriefing(job) {
   return out.join('\n');
 }
 
+// Comando do passo "Preparar" do Jeito 2, já com os vídeos (e as partes, na ordem) que o usuário mandou
+function comandoPreparar(job, f) {
+  const dir = path.join(SKILLS_APP, f.skill, 'scripts', 'jeito2');
+  const q = (s) => `"${s}"`;
+  if (f.id === 'problema-solucao') {
+    return `node ${q(path.join(dir, 'preparar.mjs'))} ${q(job.videosProjeto.certo[0])} ${job.slug} ${f.id} --video2 ${q(job.videosProjeto.errado[0])}`;
+  }
+  const ps = job.videosProjeto[f.videos[0].slot];
+  return `node ${q(path.join(dir, 'preparar.mjs'))} ${q(ps[0])} ${job.slug} ${f.id}${ps.slice(1).map((p) => ` --mais ${q(p)}`).join('')}`;
+}
+
 function promptInicial(job) {
   const f = FORMATOS.find((x) => x.id === job.formato);
   const ed = path.join(job.projeto, 'editor');
   const videos = f.videos.map((v) => {
     const ps = job.videosProjeto[v.slot];
     if (ps.length === 1) return `- ${v.rotulo}: ${ps[0]}`;
-    return `- ${v.rotulo}, em ${ps.length} partes, NESTA ORDEM:\n${ps.map((p, i) => `  ${i + 1}. ${p}`).join('\n')}`;
+    return `- ${v.rotulo}, em ${ps.length} partes, NESTA ORDEM (a ordem em que foram gravadas):\n${ps.map((p, i) => `  ${i + 1}. ${p}`).join('\n')}`;
   }).join('\n');
-  const temPartes = Object.values(job.videosProjeto).some((ps) => ps.length > 1);
-  const juntar = temPartes ? '\nO material veio em partes: junte as partes na ordem acima como se fosse uma gravação só antes de cortar (normalize rotação, resolução, fps e áudio de cada parte antes de juntar; o corte entre uma parte e outra conta como um corte normal, com o zoom leve pra disfarçar). Use o arquivo juntado como o vídeo bruto da skill.\n' : '';
-  return `/${f.skill}
+  const dirSkill = path.join(SKILLS_APP, f.skill);
+  const ps = f.id === 'problema-solucao' ? '\nNo plano deste formato, o vídeo A é o do lado certo e o B o do lado errado: use "lado_esq": "B" e "espelhar": false.' : '';
+  return `Use a skill ${f.skill}, que vem junto com o Editor Viral: leia o arquivo ${path.join(dirSkill, 'SKILL.md')} inteiro e siga ele (NÃO use outra cópia dessa skill que estiver em .claude/skills). Os scripts do Jeito 2 estão em ${path.join(dirSkill, 'scripts', 'jeito2')}: rode sempre com esse caminho completo. Onde a skill falar em C:\\Users\\SEU-USUARIO, é a pasta ${HOME}.
 
-Você está rodando dentro do Editor Viral, um app local, em modo automático: ninguém está olhando este chat. O briefing abaixo já foi respondido pelo usuário no app: pule a Etapa 1 (não peça o briefing de novo) e comece a edição.
+Você está rodando dentro do Editor Viral, um app local, em modo automático: ninguém está olhando este chat. O briefing abaixo já foi respondido pelo usuário no app: pule a Etapa 1 (não peça o briefing de novo) e faça a edição pelo Jeito 2 (Etapa 2 da skill).
+
+PRIMEIRO PASSO (Preparar), já montado com os vídeos na ordem certa:
+${comandoPreparar(job, f)}${ps}
 
 BRIEFING
 ${linhasBriefing(job)}
 
 VÍDEO(S) ENVIADO(S) (${mmss(duracaoTotal(job))} no total)
 ${videos}
-${juntar}
+
 PROJETO
-O projeto já foi criado em ${job.projeto} (o npm run new-video já rodou, o meta.json já está com id "main", 1080x1920 e 30 fps, e o vídeo já está na pasta source). Use esse projeto, não crie outro. Nome curto do vídeo: ${job.slug}.
+O projeto já foi criado em ${job.projeto} e os vídeos estão na pasta source. O preparar usa esse mesmo projeto. Nome curto do vídeo: ${job.slug}. Se precisar cair no Jeito antigo e o material veio em partes, use o bruto já juntado pelo preparar (source\\bruto.mov).
 
 REGRAS DO APP (valem por cima da skill)
-1. Progresso: no começo de cada fase, grave o arquivo ${path.join(ed, 'progresso.json')} com {"etapa": "<id>"}, usando estes ids: "falas" (analisar o vídeo, transcrever, ler a fala, pesquisar fotos), "cortes" (silêncios e cortes), "sons" (efeitos sonoros e mixagem), "tela" (design, rascunho e revisão), "final" (render final e entrega).
+1. Progresso: no começo de cada fase, grave o arquivo ${path.join(ed, 'progresso.json')} com {"etapa": "<id>"}, usando estes ids: "falas" (preparar, ler a fala, pesquisar fotos e escrever o plano), "cortes" e "sons" (montar o rascunho), "tela" (revisão), "final" (render final e entrega).
 2. Dúvidas: quando a skill mandar perguntar ao usuário antes de seguir (tabela confusa, número que não bate, gesto sem lado claro, trecho que pode ser rodada nova ou repetição etc.), NÃO pergunte no chat. Grave ${path.join(ed, 'pergunta.json')} com {"pergunta": "a pergunta em português simples, sem travessão", "detalhe": "a tabela ou o contexto, em texto"} e encerre a sua resposta. A resposta do usuário chega na próxima mensagem desta mesma conversa.
 3. Entrega: siga a skill (vídeo final em ${path.join(APP_EDICAO, '02-finais')}). No fim, grave ${path.join(ed, 'resultado.json')} com {"arquivo": "<caminho completo do mp4 final>", "resumo": "a mensagem de entrega da skill, em texto simples e curto, sem travessão"}.
 4. Não leia nem mostre o .env. Não apague nada. Use só as ferramentas liberadas.`;
@@ -215,6 +230,10 @@ function permissoes() {
 // Heurística de progresso pelo que o Claude está rodando (reserva do progresso.json).
 function etapaPorFerramenta(nome, input) {
   const cmd = String((input && (input.command || input.file_path)) || '');
+  // Jeito 2: preparar = falas; montador = cortes/sons/tela; --final = final
+  if (/preparar\.mjs/.test(cmd)) return 'falas';
+  if (/jeito2[\\/][a-z-]+\.mjs"?\s+\S+\s+--final/.test(cmd)) return 'final';
+  if (/jeito2[\\/](destampando|mao-de-vaca|avaliacao|contraste|classificacao|problema-solucao)\.mjs/.test(cmd)) return 'cortes';
   if (/firecrawl/i.test(nome) || /transcribe-elevenlabs|ffprobe/.test(cmd)) return 'falas';
   if (/astats|silencedetect|filter_complex|atrim|loudnorm/.test(cmd)) return 'cortes';
   if (/sfx\.mjs|sound-generation|adelay|amix|ebur128/.test(cmd)) return 'sons';
@@ -253,7 +272,7 @@ function rodar(item) {
   const { allow, deny } = permissoes();
   const args = ['-p', '--output-format', 'stream-json', '--verbose',
     '--permission-mode', 'dontAsk', '--permission-prompts', 'none',
-    '--add-dir', KIT, '--add-dir', path.join(HOME, '.claude', 'skills'),
+    '--add-dir', KIT, '--add-dir', SKILLS_APP, '--add-dir', path.join(HOME, '.claude', 'skills'),
     '--allowedTools', ...allow, '--disallowedTools', ...deny];
   if (job.sessaoIniciada) args.push('--resume', job.sessao);
   else args.push('--session-id', job.sessao);

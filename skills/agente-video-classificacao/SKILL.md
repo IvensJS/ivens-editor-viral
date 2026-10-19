@@ -39,7 +39,37 @@ O caminho do vídeo e o Top quanto são obrigatórios. Não comece a editar sem 
 
 Título: siga as regras do agente-classificacao. Uma frase única e limpa, sem parênteses nem subtítulo, com o critério embutido e o público exato quando houver.
 
-## Etapa 2: edição em 10 passos
+## Etapa 2: edição pelo Jeito 2 (padrão)
+No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam na pasta scripts\jeito2 desta skill (rode com `node` e o caminho completo do script). Eles já seguem o layout, o estilo, a animação, o CTA, os sons e a entrega sem metadados desta skill (as seções abaixo continuam valendo pras suas decisões no plano).
+
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> classificacao [--mais "<parte 2>" --mais "<parte 3>"]`
+   - Se o vídeo veio em várias partes (clipes), passe a primeira e as outras com --mais, NA ORDEM em que foram gravadas: o script junta tudo num vídeo só (em pé, 1080x1920, 30 fps) antes de transcrever.
+   - Copia os brutos pra 01-brutos, cria o projeto no kit (ou usa o que já existe), transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera video-projects\<nome-curto>\jeito2\folha.png (1 quadro por segundo, com grade: a folha está em 1/5 do tamanho, cada quadrado vermelho é 100 px do vídeo).
+2. Plano (você, uma vez só): leia a saída do passo 1, olhe a folha.png UMA vez e escreva video-projects\<nome-curto>\jeito2\plano.json (modelo abaixo). Tempos sempre em segundos do bruto, como o passo 1 imprimiu. Em "manter" (ou nos trechos), deixe de fora o começo e o fim sem fala e as tentativas repetidas (fica a última boa); as pausas acima de 0,2 s dentro dos trechos o código já tira sozinho.
+   ```json
+   { "slug": "<nome-curto>", "formato": "classificacao", "titulo": "Classificando os formatos de vídeo mais virais do Instagram",
+     "manter": [[2.60, 47.30]],
+     "enquadramento": { "zoom": 1.25, "x": 100, "y": 344 }, "origem_zoom": "72% 31%",
+     "espera": { "x": 360, "y": 930, "escala": 1.2 },
+     "itens": [
+       { "texto": "Classificação", "emoji": "📊", "posicao": 2, "t_nome": 2.66, "t_posicao": 3.78 },
+       { "texto": "Contraste", "emoji": "⚖️", "posicao": 1, "t_nome": 43.58, "t_posicao": 44.72, "espera": { "x": 250, "y": 1000, "escala": 1.5 } } ],
+     "cta": { "tipo": "comenta", "palavra": "EDIÇÃO", "sub": "que eu te envio no direct", "t": 40.78, "t_fim": 43.38 },
+     "legenda_post": "..." }
+   ```
+   - Lista na esquerda (números de ~440 a ~1450 px; a altura das linhas se ajusta ao número de itens) e a pessoa do meio pra direita: use o enquadramento (zoom e recorte) pra isso.
+   - Cada item: "t_nome" quando a pessoa fala o nome (ele aparece no ponto de espera, perto dela, num lugar livre e nunca no rosto) e "t_posicao" quando fala a posição (voa pra linha). Top 3 ficam ouro, prata e bronze e o 1º ganha um flash dourado.
+   - Item com emoji (ação, formato, ideia) OU com foto (produto: "foto": { "url": "https://..." }). Tudo ou nada no mesmo vídeo.
+   - cta: tipo "comenta" (a palavra vai no botão) ou { "frase": "Segue pra ...", "t": 0.0 } (cartão com + Seguir).
+3. Montar (código): `node classificacao.mjs <nome-curto>`: corta, mixa os sons, monta o index.html pelo modelo, roda o lint, renderiza o rascunho e gera jeito2\revisao.png com os quadros principais. Se aparecer AVISO, corrija o plano e rode de novo.
+4. Revisar (você, uma vez): olhe a revisao.png UMA vez: regra do rosto, textos e fotos certos, cada coisa entrando na hora certa, CTA. Se algo estiver errado, corrija só o plano.json e repita o passo 3.
+5. Entregar (código): `node classificacao.mjs <nome-curto> --final`: renderiza em alta, tira os metadados, salva em 02-finais como <nome-curto>-vN.mp4 e grava o roteiro com a legenda do post em 03-roteiros.
+6. Mande a mensagem de "Entrega".
+
+Se algum script der erro que não seja do plano, explique em linguagem simples e, se precisar, termine pelo Jeito antigo.
+
+## Jeito antigo (reserva): edição em 10 passos
+Só quando o Jeito 2 não der conta (layout fora do padrão, caso que os scripts não cobrem ou erro nos scripts).
 Crie uma lista de tarefas com os 10 passos e vá marcando.
 
 1. Analisar o vídeo bruto

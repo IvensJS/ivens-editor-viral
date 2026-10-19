@@ -32,7 +32,38 @@ Quando for acionado, peça tudo numa mensagem só, em lista numerada:
 
 Só o caminho do vídeo é obrigatório. Se o usuário não responder algum outro item, use o padrão e avise qual padrão usou.
 
-## Etapa 2: edição em 10 passos
+## Etapa 2: edição pelo Jeito 2 (padrão)
+No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam na pasta scripts\jeito2 desta skill (rode com `node` e o caminho completo do script). Eles já seguem o layout, o estilo, a animação, o CTA, os sons e a entrega sem metadados desta skill (as seções abaixo continuam valendo pras suas decisões no plano).
+
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> mao-de-vaca [--mais "<parte 2>" --mais "<parte 3>"]`
+   - Se o vídeo veio em várias partes (clipes), passe a primeira e as outras com --mais, NA ORDEM em que foram gravadas: o script junta tudo num vídeo só (em pé, 1080x1920, 30 fps) antes de transcrever.
+   - Copia os brutos pra 01-brutos, cria o projeto no kit (ou usa o que já existe), transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera video-projects\<nome-curto>\jeito2\folha.png (1 quadro por segundo, com grade: a folha está em 1/5 do tamanho, cada quadrado vermelho é 100 px do vídeo).
+2. Plano (você, uma vez só): leia a saída do passo 1, olhe a folha.png UMA vez e escreva video-projects\<nome-curto>\jeito2\plano.json (modelo abaixo). Tempos sempre em segundos do bruto, como o passo 1 imprimiu. Em "manter" (ou nos trechos), deixe de fora o começo e o fim sem fala e as tentativas repetidas (fica a última boa); as pausas acima de 0,2 s dentro dos trechos o código já tira sozinho.
+   ```json
+   { "slug": "<nome-curto>", "formato": "mao-de-vaca", "titulo": "Tá sem grana? Vai nesse",
+     "manter": [[4.40, 25.00]],
+     "enquadramento": { "zoom": 1.12, "x": 58, "y": 0 },
+     "rotulos": { "caro": "TÁ SEM $?", "barato": "VAI NESSE!" },
+     "trocas": [
+       { "caro": { "nome": "CapCut Pro", "preco": "R$66/MÊS", "foto": { "url": "https://...", "modo": "quadrado" } },
+         "barato": { "nome": "Edits", "preco": "GRÁTIS", "foto": { "url": "https://...", "modo": "quadrado" } },
+         "t_caro": 4.46, "t_barato": 6.58 } ],
+     "cta": { "frase": "Segue pra mais dicas\nque economizam", "t": 22.10 },
+     "legenda_post": "..." }
+   ```
+   - enquadramento: zoom (1 = vídeo inteiro) e o canto de cima/esquerdo do recorte, em px do quadro 1080x1920 (sem x fica centralizado; y 0 = ancorado no topo). A cabeça tem que ficar abaixo de ~770 px, livre das etiquetas e fotos.
+   - t_caro: quando a pessoa começa a fala do caro ("Tá sem grana pra..."); t_barato: quando fala o barato ("Utiliza o...", "Compra o..."). A troca sai sozinha antes da próxima (ou use "t_sai").
+   - Fotos: pesquise no Firecrawl como em "Fotos dos produtos" e ponha a url da melhor foto (o código baixa e trata; "quadrado" é o padrão deste formato). Se a foto já estiver tratada no PC, use { "arquivo": "caminho.png" }. Preço: o falado; se não falar, pesquise.
+   - cta: a frase (use \n pra quebrar a linha) e o tempo em que a pessoa começa a pedir pra seguir; os produtos saem antes.
+3. Montar (código): `node mao-de-vaca.mjs <nome-curto>`: corta, mixa os sons, monta o index.html pelo modelo, roda o lint, renderiza o rascunho e gera jeito2\revisao.png com os quadros principais. Se aparecer AVISO, corrija o plano e rode de novo.
+4. Revisar (você, uma vez): olhe a revisao.png UMA vez: regra do rosto, textos e fotos certos, cada coisa entrando na hora certa, CTA. Se algo estiver errado, corrija só o plano.json e repita o passo 3.
+5. Entregar (código): `node mao-de-vaca.mjs <nome-curto> --final`: renderiza em alta, tira os metadados, salva em 02-finais como <nome-curto>-vN.mp4 e grava o roteiro com a legenda do post em 03-roteiros.
+6. Mande a mensagem de "Entrega".
+
+Se algum script der erro que não seja do plano, explique em linguagem simples e, se precisar, termine pelo Jeito antigo.
+
+## Jeito antigo (reserva): edição em 10 passos
+Só quando o Jeito 2 não der conta (layout fora do padrão, caso que os scripts não cobrem ou erro nos scripts).
 Crie uma lista de tarefas com os 10 passos e vá marcando.
 
 1. Analisar o vídeo bruto

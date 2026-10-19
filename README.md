@@ -55,7 +55,7 @@ Depois da instalação:
 
 1. Na pasta `Documentos/projetos/ivens-editor-viral`, clique duas vezes em `iniciar-editor.bat`. Por enquanto o aplicativo só roda no Windows; no Mac, use as skills direto no Claude (abaixo).
 2. O navegador abre em http://localhost:3210. A senha aparece na janela preta.
-3. Escolha o formato, conte sobre o vídeo, mande o vídeo gravado (até 2 minutos) e aperte **Editar meu vídeo**.
+3. Escolha o formato, conte sobre o vídeo, mande o vídeo gravado (até 2 minutos) e aperte **Editar meu vídeo**. Gravou em vários clipes? Pode mandar até 6 partes, **na ordem em que você gravou** (o começo primeiro, o pedido pra seguir por último): o app junta tudo num vídeo só. Errou a ordem? Use o botão **Subir**.
 4. No celular, no mesmo Wi-Fi, abra o endereço "No celular" que aparece na janela. Na primeira vez, o Windows pergunta se libera o acesso na rede: clique em Permitir.
 5. O vídeo pronto aparece na tela, em `app-edicao/02-finais` e na Área de Trabalho. Dá pra pedir até 2 ajustes.
 
@@ -79,7 +79,7 @@ Depois da instalação:
 ## Bom saber
 
 - Os vídeos ficam no seu computador. O app só usa a sua internet pra transcrição (ElevenLabs), fotos (Firecrawl) e o Claude.
-- Cada edição usa o limite do seu plano do Claude e leva uns 10 a 30 minutos.
+- As edições usam o **Jeito 2**: o Claude só toma as decisões criativas (um plano curto, com uma olhada pra planejar e outra pra revisar) e scripts que vêm junto com as skills fazem o resto (cortes, sons, tela, render e entrega). Gasta bem menos do limite do seu plano do Claude e cada edição leva uns 5 a 15 minutos. O app usa as skills da pasta `skills/` dele mesmo.
 - O app roda o Claude Code com permissões limitadas: só os programas de edição, o Firecrawl e as pastas do projeto. Ele não lê o `.env` e não mexe nas skills.
 - Música de fundo não entra: escolha um áudio em alta direto no app na hora de postar.
 - O HyperFrames Student Kit é de Nate Herk (licença MIT). As fontes Poppins e Lilita One são do Google Fonts (SIL Open Font License 1.1).

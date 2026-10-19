@@ -37,9 +37,10 @@ Só o caminho do vídeo é obrigatório. Se o usuário não responder algum outr
 ## Etapa 2: edição pelo Jeito 2 (padrão em 2026-10-19 pra economizar tokens)
 No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam em C:\Users\SEU-USUARIO\.claude\skills\agente-video-destampando\scripts\jeito2 (rode com `node`, de qualquer pasta). Eles já seguem "Layout da tela", "Estilo", "Animação", "CTA", a mixagem e a entrega sem metadados desta skill.
 
-1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> destampando`
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> destampando [--mais "<parte 2>" --mais "<parte 3>"]`
+   - Se o vídeo veio em várias partes (clipes), passe a primeira e as outras com --mais, NA ORDEM em que foram gravadas: o script junta tudo num vídeo só antes de transcrever.
    - Copia o bruto pra 01-brutos, cria o projeto no kit, transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera a folha de quadros em video-projects\<nome-curto>\jeito2\folha.png (1 por segundo, grade de 100 px).
-   - Só funciona com vídeo em pé (1080x1920 ou proporção 9:16, sem rotação estranha) e uma gravação só. Se não for assim, use o "Jeito antigo" abaixo.
+   - Vídeo em pé (1080x1920 ou 9:16). Vídeo deitado ou com rotação estranha: use o "Jeito antigo" abaixo.
 2. Plano (você, uma vez só): leia a saída do passo 1 e olhe a folha.png UMA vez. Escreva video-projects\<nome-curto>\jeito2\plano.json:
    ```json
    {

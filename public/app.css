@@ -108,11 +108,15 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .grupo-upload h2 { margin-bottom: 6px; }
 .grupo-upload .upload .caixa { margin-bottom: 0; }
 .partes { list-style: none; margin: 0 0 12px; padding: 0; counter-reset: parte; }
-.partes li { counter-increment: parte; display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 10px; min-height: 52px; padding: 8px 0; border-bottom: 1px solid var(--borda); }
+.partes li { counter-increment: parte; display: grid; grid-template-columns: auto 1fr auto auto auto; align-items: center; gap: 10px; min-height: 52px; padding: 8px 0; border-bottom: 1px solid var(--borda); }
 .partes li::before { content: counter(parte); width: 28px; height: 28px; border-radius: 50%; background: var(--roxo-claro); color: var(--roxo); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 .partes .nome { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .partes .dur { color: var(--texto2); font-variant-numeric: tabular-nums; }
 .partes .tirar { font: inherit; font-weight: 600; color: var(--erro); background: none; border: 0; min-height: 44px; padding: 0 8px; cursor: pointer; }
+.partes .subir { font: inherit; font-weight: 600; color: var(--roxo); background: none; border: 0; min-height: 44px; padding: 0 8px; cursor: pointer; }
+.aviso-ordem { background: #FFF6D6; border: 2px solid #F2C94C; border-radius: 12px; padding: 12px 14px; margin: 0 0 14px; display: grid; gap: 4px; }
+.aviso-ordem strong { color: #5A4300; }
+.aviso-ordem span { color: #6B5A1F; font-size: 14px; }
 .partes .envio { grid-column: 1 / -1; margin-top: 0; }
 .dicas ul { margin: 0; padding-left: 20px; }
 .dicas li { margin-bottom: 8px; color: var(--texto2); }

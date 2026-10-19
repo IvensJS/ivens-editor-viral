@@ -11,8 +11,10 @@
 // Usa a biblioteca sharp que já vem instalada no HyperFrames Student Kit.
 
 import { createRequire } from "node:module";
+import os from "node:os";
+import path from "node:path";
 
-const KIT = "C:/Users/SEU-USUARIO/hyperframes-student-kit/package.json";
+const KIT = path.join(os.homedir(), "hyperframes-student-kit", "package.json");
 const sharp = createRequire(KIT)("sharp");
 
 const args = process.argv.slice(2);

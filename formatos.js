@@ -9,7 +9,7 @@ const FORMATOS = [
     nome: 'Classificação',
     frase: 'Ranking tipo Top 5 ou Top 10, com cada item indo pro lugar dele.',
     skill: 'agente-video-classificacao',
-    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 5 }],
+    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 6 }],
     sons: true,
     campos: [
       { id: 'top', tipo: 'select', rotulo: 'É um Top quanto?', obrigatorio: true,
@@ -36,7 +36,7 @@ const FORMATOS = [
     nome: 'Contraste',
     frase: 'Dois lados, tipo Indico x Não indico, com cada exemplo indo pro lado certo.',
     skill: 'agente-video-contraste',
-    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 5 }],
+    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 6 }],
     sons: true,
     campos: [
       { id: 'titulo', tipo: 'texto', rotulo: 'Título no topo (o assunto)', exemplo: 'Leite condensado',
@@ -59,7 +59,7 @@ const FORMATOS = [
     nome: 'Mão de vaca',
     frase: 'Produto caro x produto barato, com foto e preço de cada um.',
     skill: 'agente-video-mao-de-vaca',
-    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 5 }],
+    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 6 }],
     sons: true,
     campos: [
       { id: 'trocas', tipo: 'lista', rotulo: 'As 3 trocas (caro e barato)', tamanho: 3,
@@ -82,7 +82,7 @@ const FORMATOS = [
     nome: 'Destampando',
     frase: 'NUNCA em vermelho x o certo em verde, com tarjas que somem conforme você fala.',
     skill: 'agente-video-destampando',
-    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 5 }],
+    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 6 }],
     sons: true,
     campos: [
       { id: 'tipo', tipo: 'select', rotulo: 'Tipo de título',
@@ -129,7 +129,7 @@ const FORMATOS = [
     nome: 'Avaliação',
     frase: 'Produtos numa escala verde, amarelo e vermelho, com o porquê de cada um.',
     skill: 'agente-video-avaliacao',
-    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 5 }],
+    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 6 }],
     sons: true,
     campos: [
       { id: 'titulo', tipo: 'texto', rotulo: 'Título no topo (a categoria)', exemplo: 'Sabonetes líquidos para crianças',
@@ -157,7 +157,7 @@ const EM_PAUSA = [
     nome: 'Edição magnética',
     frase: 'Você falando pra câmera, com cortes rápidos, zoom, legenda e efeitos que prendem.',
     skill: 'agente-video-edicao-magnetica',
-    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 5 }],
+    videos: [{ slot: 'principal', rotulo: 'Seu vídeo', partes: 6 }],
     sons: true,
     campos: [
       { id: 'legenda', tipo: 'toggle', rotulo: 'Legenda dinâmica', padrao: true },

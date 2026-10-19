@@ -32,7 +32,37 @@ Quando for acionado, peça tudo numa mensagem só, em lista numerada:
 
 Só os dois arquivos são obrigatórios. Se o usuário não responder algum outro item, use o padrão e avise qual padrão usou. Neste formato NÃO vai efeito sonoro.
 
-## Etapa 2: edição em 9 passos
+## Etapa 2: edição pelo Jeito 2 (padrão)
+No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam na pasta scripts\jeito2 desta skill (rode com `node` e o caminho completo do script). Eles já seguem o layout, o estilo, a animação, o CTA, os sons e a entrega sem metadados desta skill (as seções abaixo continuam valendo pras suas decisões no plano).
+
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> problema-solucao [--mais "<parte 2>" --mais "<parte 3>"]`
+   - Este formato usa DUAS gravações: `node preparar.mjs "<vídeo do lado certo>" <nome-curto> problema-solucao --video2 "<vídeo do lado errado>"`. O primeiro vira o vídeo "A" e o --video2 o "B".
+   - Se o vídeo veio em várias partes (clipes), passe a primeira e as outras com --mais, NA ORDEM em que foram gravadas: o script junta tudo num vídeo só (em pé, 1080x1920, 30 fps) antes de transcrever.
+   - Copia os brutos pra 01-brutos, cria o projeto no kit (ou usa o que já existe), transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera video-projects\<nome-curto>\jeito2\folha.png (1 quadro por segundo, com grade: a folha está em 1/5 do tamanho, cada quadrado vermelho é 100 px do vídeo).
+2. Plano (você, uma vez só): leia a saída do passo 1, olhe a folha.png UMA vez e escreva video-projects\<nome-curto>\jeito2\plano.json (modelo abaixo). Tempos sempre em segundos do bruto, como o passo 1 imprimiu. Em "manter" (ou nos trechos), deixe de fora o começo e o fim sem fala e as tentativas repetidas (fica a última boa); as pausas acima de 0,2 s dentro dos trechos o código já tira sozinho.
+   ```json
+   { "slug": "<nome-curto>", "formato": "problema-solucao", "titulo": "NA HORA DE GRAVAR",
+     "etiquetas": { "esq": "Vídeo\nflopado", "dir": "Vídeo\nviralizado" },
+     "lado_esq": "B", "espelhar": false, "enquadramento": { "zoom": 1.12, "x": 58, "y": 0 },
+     "turnos": [
+       { "video": "B", "de": 7.50, "ate": 9.30, "congela": 3.18, "fala": "Oi, gente, tudo bem?" },
+       { "video": "A", "de": 3.18, "ate": 6.33, "congela": 9.25, "fala": "Os três segredos..." } ],
+     "sem_legenda": [{ "video": "A", "de": 44.89, "ate": 46 }],
+     "cta": { "frase": "Segue pra gravar\nvídeos que viralizam", "video": "A", "t": 44.68 },
+     "legenda_post": "..." }
+   ```
+   - lado_esq: qual vídeo fica na esquerda (o lado errado, normalmente o B). espelhar: true só se as gravações precisarem ser espelhadas pra cada pessoa ficar do seu lado.
+   - turnos: um por fala, na ordem da conversa: "video" (quem fala), "de"/"ate" (tempo no vídeo de quem fala; tentativas repetidas ficam de fora) e "congela" (tempo no OUTRO vídeo em que ele fica parado, de boca fechada, olhando pra câmera).
+   - sem_legenda: trechos sem legenda (nome de perfil, @). "legenda": false desliga a legenda. Este formato não tem efeitos sonoros.
+3. Montar (código): `node problema-solucao.mjs <nome-curto>`: corta, mixa os sons, monta o index.html pelo modelo, roda o lint, renderiza o rascunho e gera jeito2\revisao.png com os quadros principais. Se aparecer AVISO, corrija o plano e rode de novo.
+4. Revisar (você, uma vez): olhe a revisao.png UMA vez: regra do rosto, textos e fotos certos, cada coisa entrando na hora certa, CTA. Se algo estiver errado, corrija só o plano.json e repita o passo 3.
+5. Entregar (código): `node problema-solucao.mjs <nome-curto> --final`: renderiza em alta, tira os metadados, salva em 02-finais como <nome-curto>-vN.mp4 e grava o roteiro com a legenda do post em 03-roteiros.
+6. Mande a mensagem de "Entrega".
+
+Se algum script der erro que não seja do plano, explique em linguagem simples e, se precisar, termine pelo Jeito antigo.
+
+## Jeito antigo (reserva): edição em 9 passos
+Só quando o Jeito 2 não der conta (layout fora do padrão, caso que os scripts não cobrem ou erro nos scripts).
 Crie uma lista de tarefas com os 9 passos e vá marcando.
 
 1. Analisar os dois vídeos brutos

@@ -39,7 +39,36 @@ Quando for acionado, peça tudo numa mensagem só, em lista numerada:
 
 Só o caminho do vídeo é obrigatório. Se o usuário não responder algum outro item, use o padrão e avise qual padrão usou.
 
-## Etapa 2: edição em 9 passos
+## Etapa 2: edição pelo Jeito 2 (padrão)
+No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam na pasta scripts\jeito2 desta skill (rode com `node` e o caminho completo do script). Eles já seguem o layout, o estilo, a animação, o CTA, os sons e a entrega sem metadados desta skill (as seções abaixo continuam valendo pras suas decisões no plano).
+
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> contraste [--mais "<parte 2>" --mais "<parte 3>"]`
+   - Se o vídeo veio em várias partes (clipes), passe a primeira e as outras com --mais, NA ORDEM em que foram gravadas: o script junta tudo num vídeo só (em pé, 1080x1920, 30 fps) antes de transcrever.
+   - Copia os brutos pra 01-brutos, cria o projeto no kit (ou usa o que já existe), transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera video-projects\<nome-curto>\jeito2\folha.png (1 quadro por segundo, com grade: a folha está em 1/5 do tamanho, cada quadrado vermelho é 100 px do vídeo).
+2. Plano (você, uma vez só): leia a saída do passo 1, olhe a folha.png UMA vez e escreva video-projects\<nome-curto>\jeito2\plano.json (modelo abaixo). Tempos sempre em segundos do bruto, como o passo 1 imprimiu. Em "manter" (ou nos trechos), deixe de fora o começo e o fim sem fala e as tentativas repetidas (fica a última boa); as pausas acima de 0,2 s dentro dos trechos o código já tira sozinho.
+   ```json
+   { "slug": "<nome-curto>", "formato": "contraste", "titulo": "LEITE CONDENSADO",
+     "manter": [[8.00, 12.62], [13.05, 17.85]],
+     "enquadramento": { "zoom": 1.6, "x": 256, "y": 0 }, "y_lados": 995,
+     "lados": { "esq": { "texto": "USARIA", "cor": "verde" }, "dir": { "texto": "NÃO USARIA", "cor": "vermelho" } },
+     "exemplos": [
+       { "nome": "Moça semidesnatado", "foto": { "url": "https://...", "modo": "quadrado" }, "t_aparece": 8.02, "t_veredito": 9.60, "lado": "dir" } ],
+     "cta": null, "legenda_post": "..." }
+   ```
+   - Título acima da cabeça sem encostar no cabelo ("y_titulo", padrão 205 px; "tamanho_titulo", padrão 88). Etiquetas na altura dos ombros: "y_lados" é o topo delas; o exemplo aparece logo abaixo (460 px de altura).
+   - Cores dos lados: verde e vermelho (bom e ruim) ou azul e laranja (lados neutros). O lado de cada exemplo é o do veredito na fala (e do gesto).
+   - Exemplo com foto (produto ou objeto, Firecrawl: url, ou { "arquivo": "caminho.png" }) OU com texto ({ "texto": "Comer de madrugada", ... }) pra ação ou hábito. Tudo ou nada: no mesmo vídeo, todos com foto ou todos com texto.
+   - t_aparece: quando a pessoa fala o exemplo; t_veredito: quando dá o veredito (o exemplo é arrastado pro lado e some).
+   - cta (opcional): { "frase": "...", "t": 0.0, "top": 1400 }.
+3. Montar (código): `node contraste.mjs <nome-curto>`: corta, mixa os sons, monta o index.html pelo modelo, roda o lint, renderiza o rascunho e gera jeito2\revisao.png com os quadros principais. Se aparecer AVISO, corrija o plano e rode de novo.
+4. Revisar (você, uma vez): olhe a revisao.png UMA vez: regra do rosto, textos e fotos certos, cada coisa entrando na hora certa, CTA. Se algo estiver errado, corrija só o plano.json e repita o passo 3.
+5. Entregar (código): `node contraste.mjs <nome-curto> --final`: renderiza em alta, tira os metadados, salva em 02-finais como <nome-curto>-vN.mp4 e grava o roteiro com a legenda do post em 03-roteiros.
+6. Mande a mensagem de "Entrega".
+
+Se algum script der erro que não seja do plano, explique em linguagem simples e, se precisar, termine pelo Jeito antigo.
+
+## Jeito antigo (reserva): edição em 9 passos
+Só quando o Jeito 2 não der conta (layout fora do padrão, caso que os scripts não cobrem ou erro nos scripts).
 Crie uma lista de tarefas com os 9 passos e vá marcando.
 
 1. Analisar o vídeo bruto

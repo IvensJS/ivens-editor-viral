@@ -197,14 +197,22 @@ function pintarUploads() {
     grupo.className = 'cartao grupo-upload';
     grupo.dataset.slot = v.slot;
     const h = document.createElement('h2'); h.textContent = v.rotulo; grupo.appendChild(h);
-    if (max > 1) { const s = document.createElement('p'); s.className = 'sub pequeno'; s.textContent = `Pode mandar até ${max} partes. A gente junta na ordem da lista.`; grupo.appendChild(s); }
+    if (max > 1) {
+      const s = document.createElement('div'); s.className = 'aviso-ordem';
+      s.innerHTML = '<strong>Gravou em mais de um clipe? Manda na ordem em que você gravou.</strong>' +
+        `<span>Primeiro o começo do vídeo, depois o meio e por último o final (o pedido pra seguir). A gente junta tudo nessa ordem, num vídeo só. Dá pra mandar até ${max} partes.</span>`;
+      grupo.appendChild(s);
+    }
 
     const lista = document.createElement('ol'); lista.className = 'partes';
     partes.forEach((p, i) => {
       const li = document.createElement('li');
-      li.innerHTML = '<span class="nome"></span><span class="dur"></span><button type="button" class="tirar">Tirar</button><div class="envio" hidden><div></div></div>';
-      li.querySelector('.nome').textContent = p.arq.name;
+      li.innerHTML = '<span class="nome"></span><span class="dur"></span><button type="button" class="subir">Subir</button><button type="button" class="tirar">Tirar</button><div class="envio" hidden><div></div></div>';
+      li.querySelector('.nome').textContent = max > 1 ? `Parte ${i + 1}${i === 0 ? ' (o começo)' : ''}: ${p.arq.name}` : p.arq.name;
       li.querySelector('.dur').textContent = p.duracao == null ? '' : mmss(p.duracao);
+      const subir = li.querySelector('.subir');
+      if (i === 0) subir.style.visibility = 'hidden';
+      else subir.addEventListener('click', () => { [partes[i - 1], partes[i]] = [partes[i], partes[i - 1]]; avisoUpload(null); pintarUploads(); });
       li.querySelector('.tirar').addEventListener('click', () => { partes.splice(i, 1); avisoUpload(null); pintarUploads(); });
       p.li = li;
       lista.appendChild(li);
@@ -215,7 +223,8 @@ function pintarUploads() {
       const l = document.createElement('label');
       l.className = 'upload';
       l.innerHTML = '<input type="file" accept="video/mp4,video/quicktime,.mp4,.mov"><div class="caixa"><strong></strong><span>MP4 ou MOV</span></div>';
-      l.querySelector('strong').textContent = partes.length ? 'Adicionar outra parte' : 'Toque pra escolher o vídeo';
+      l.querySelector('strong').textContent = !partes.length ? (max > 1 ? 'Escolher a parte 1 (o começo do vídeo)' : 'Toque pra escolher o vídeo')
+        : `Adicionar a parte ${partes.length + 1} (o que você gravou depois)`;
       l.querySelector('input').addEventListener('change', async (e) => {
         const arq = e.target.files[0];
         if (!arq) return;

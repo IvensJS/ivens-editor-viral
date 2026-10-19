@@ -38,7 +38,39 @@ Quando for acionado, peça tudo numa mensagem só, em lista numerada:
 
 Só o caminho do vídeo é obrigatório. Se o usuário não responder algum outro item, use o padrão e avise qual padrão usou.
 
-## Etapa 2: edição em 9 passos
+## Etapa 2: edição pelo Jeito 2 (padrão)
+No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam na pasta scripts\jeito2 desta skill (rode com `node` e o caminho completo do script). Eles já seguem o layout, o estilo, a animação, o CTA, os sons e a entrega sem metadados desta skill (as seções abaixo continuam valendo pras suas decisões no plano).
+
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> avaliacao [--mais "<parte 2>" --mais "<parte 3>"]`
+   - Se o vídeo veio em várias partes (clipes), passe a primeira e as outras com --mais, NA ORDEM em que foram gravadas: o script junta tudo num vídeo só (em pé, 1080x1920, 30 fps) antes de transcrever.
+   - Copia os brutos pra 01-brutos, cria o projeto no kit (ou usa o que já existe), transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera video-projects\<nome-curto>\jeito2\folha.png (1 quadro por segundo, com grade: a folha está em 1/5 do tamanho, cada quadrado vermelho é 100 px do vídeo).
+2. Plano (você, uma vez só): leia a saída do passo 1, olhe a folha.png UMA vez e escreva video-projects\<nome-curto>\jeito2\plano.json (modelo abaixo). Tempos sempre em segundos do bruto, como o passo 1 imprimiu. Em "manter" (ou nos trechos), deixe de fora o começo e o fim sem fala e as tentativas repetidas (fica a última boa); as pausas acima de 0,2 s dentro dos trechos o código já tira sozinho.
+   ```json
+   { "slug": "<nome-curto>", "formato": "avaliacao", "titulo": "Avaliação: ...", "enquadramento": { "zoom": 1 },
+     "rodadas": [
+       { "titulo": "Microfones sem fio pra gravar no celular", "trecho": [2.85, 7.80],
+         "niveis": [["VALE CADA<br>CENTAVO", ""], ["DÁ PRO<br>GASTO", ""], ["NÃO<br>COMPRARIA", ""]],
+         "produtos": [ { "nome": "Hollyland Lark M2", "foto": { "url": "https://...", "modo": "solto" }, "tipo": "solto" },
+                       { "nome": "...", "foto": { "url": "https://..." }, "tipo": "solto" },
+                       { "nome": "...", "foto": { "url": "https://..." }, "tipo": "solto" } ],
+         "notas": [3.04, 5.22, 6.74] } ],
+     "cta": { "frase": "Segue pra não comprar\nequipamento errado", "trecho": [49.18, 52.80], "t": 49.30, "top": 1400 },
+     "legenda_post": "..." }
+   ```
+   - O Jeito 2 faz só o layout EM CIMA (níveis no topo, produto embaixo de cada nível, cabeça abaixo de ~850 px). Se precisar do layout lateral (cabeça alta), use o Jeito antigo.
+   - Uma rodada por categoria, na ordem da gravação: "trecho" é o pedaço do bruto da rodada (o quadro limpa entre uma e outra) e "notas" o tempo em que a pessoa dá a nota de cada produto, na ordem verde, amarelo, vermelho.
+   - niveis: o texto que a pessoa usa (<br> quebra a linha) e a classe: "" normal, "g" pra palavra curta (ÓTIMO, BOM, RUIM), "m" pra palavra comprida (PROFISSIONAL).
+   - produtos: foto do Firecrawl (url; o código baixa e tira o fundo) ou { "arquivo": "caminho.png" }; "tipo": "solto" (produto sem fundo, padrão) ou "foto" (foto com moldura branca, pra lugar ou cena).
+   - cta: o trecho do pedido pra seguir e o tempo em que ele começa; "top" é a altura do cartão (sem cobrir o rosto).
+3. Montar (código): `node avaliacao.mjs <nome-curto>`: corta, mixa os sons, monta o index.html pelo modelo, roda o lint, renderiza o rascunho e gera jeito2\revisao.png com os quadros principais. Se aparecer AVISO, corrija o plano e rode de novo.
+4. Revisar (você, uma vez): olhe a revisao.png UMA vez: regra do rosto, textos e fotos certos, cada coisa entrando na hora certa, CTA. Se algo estiver errado, corrija só o plano.json e repita o passo 3.
+5. Entregar (código): `node avaliacao.mjs <nome-curto> --final`: renderiza em alta, tira os metadados, salva em 02-finais como <nome-curto>-vN.mp4 e grava o roteiro com a legenda do post em 03-roteiros.
+6. Mande a mensagem de "Entrega".
+
+Se algum script der erro que não seja do plano, explique em linguagem simples e, se precisar, termine pelo Jeito antigo.
+
+## Jeito antigo (reserva): edição em 9 passos
+Só quando o Jeito 2 não der conta (layout fora do padrão, caso que os scripts não cobrem ou erro nos scripts).
 Crie uma lista de tarefas com os 9 passos e vá marcando.
 
 1. Analisar o vídeo bruto
