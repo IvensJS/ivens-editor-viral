@@ -147,6 +147,11 @@ const FORMATOS = [
       'Pode fazer várias rodadas no mesmo vídeo (ex: microfones, depois suportes).',
     ],
   },
+];
+
+// Em pausa: a edição magnética gasta muito token (cada vídeo é diferente). Pra voltar, mova o item pra lista FORMATOS
+// e a skill de .claude/skills-em-pausa de volta pra .claude/skills.
+const EM_PAUSA = [
   {
     id: 'edicao-magnetica',
     nome: 'Edição magnética',

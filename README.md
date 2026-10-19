@@ -1,15 +1,14 @@
 # Ivens Editor Viral
 
 Edite vídeos curtos pro Instagram, TikTok e Shorts com IA, do vídeo bruto até o arquivo final em 1080x1920.
-São **7 skills do Claude Code** que cortam as pausas, leem a fala, montam a tela, colocam efeitos e sons e
+São **6 skills do Claude Code** que cortam as pausas, leem a fala, montam a tela, colocam efeitos e sons e
 renderizam o vídeo, e o **Editor Viral**, um aplicativo com telas simples (no computador e no celular)
 pra usar as skills sem precisar escrever nada.
 
-## As 7 skills
+## As 6 skills
 
 | Comando | Formato |
 | --- | --- |
-| `/agente-video-edicao-magnetica` | Você falando pra câmera, com gancho nos 3 primeiros segundos, cortes fluidos, zoom, cor que muda com a emoção, letras em destaque, emojis e efeitos sonoros |
 | `/agente-video-classificacao` | Ranking (Top 5, Top 10), com cada item indo pro lugar dele conforme a fala |
 | `/agente-video-contraste` | Dois lados (Indico x Não indico), com cada exemplo arrastado pro lado do veredito |
 | `/agente-video-mao-de-vaca` | Produto caro x produto barato, com foto e preço pesquisados na internet |
@@ -71,7 +70,7 @@ Depois da instalação:
 
 | Pasta ou arquivo | O que é |
 | --- | --- |
-| `skills/` | As 7 skills (e o script que trata as fotos dos produtos) |
+| `skills/` | As 6 skills (e o script que trata as fotos dos produtos) |
 | `fontes/` | Poppins (700, 800, 900) e Lilita One |
 | `modelos/` | Projetos de exemplo que as skills usam como modelo de design |
 | `pasta-de-trabalho/CLAUDE.md` | Regras da pasta app-edicao (onde ficam os vídeos brutos, finais e roteiros) |

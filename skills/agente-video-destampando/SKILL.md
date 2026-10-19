@@ -1,6 +1,6 @@
 ---
 name: agente-video-destampando
-description: Edita vídeo no formato destampando (NUNCA DIGA/USE/FAÇA/COMPRE em vermelho x DIGA/USE/FAÇA/COMPRE em verde, com tarjas que somem linha a linha conforme a fala) do zero até o arquivo final, usando o HyperFrames Student Kit e a ElevenLabs (transcrição e efeitos sonoros). Usar sempre que o usuário digitar /agente-video-destampando ou pedir pra editar um vídeo destampando.
+description: Edita vídeo no formato destampando (NUNCA DIGA/USE/FAÇA/COMPRE em vermelho x DIGA/USE/FAÇA/COMPRE em verde, com tarjas que somem linha a linha conforme a fala) do zero até o arquivo final pelo Jeito 2 (o Claude só escreve o plano de edição; scripts cortam, mixam, montam e renderizam), usando o HyperFrames Student Kit e a ElevenLabs (transcrição e efeitos sonoros). Usar sempre que o usuário digitar /agente-video-destampando ou pedir pra editar um vídeo destampando.
 ---
 
 # Agente de Vídeo Destampando
@@ -34,8 +34,41 @@ Quando for acionado, peça tudo numa mensagem só, em lista numerada:
 
 Só o caminho do vídeo é obrigatório. Se o usuário não responder algum outro item, use o padrão e avise qual padrão usou. Etiqueta de contexto: por padrão, só entra se o vídeo tiver um contexto claro na fala ou no roteiro (ex: "versão vendas", "versão confeitaria"); senão, fica sem.
 
-## Etapa 2: edição em 9 passos
-Crie uma lista de tarefas com os 9 passos e vá marcando.
+## Etapa 2: edição pelo Jeito 2 (padrão em 2026-10-19 pra economizar tokens)
+No Jeito 2 você só toma as decisões criativas UMA vez (o plano.json) e olha UMA folha de revisão. O resto é código e sai sempre igual: não leia o kit, não monte o index.html na mão, não meça volume, não fique tirando quadros. Os scripts ficam em C:\Users\SEU-USUARIO\.claude\skills\agente-video-destampando\scripts\jeito2 (rode com `node`, de qualquer pasta). Eles já seguem "Layout da tela", "Estilo", "Animação", "CTA", a mixagem e a entrega sem metadados desta skill.
+
+1. Preparar (código): `node preparar.mjs "<vídeo>" <nome-curto> destampando`
+   - Copia o bruto pra 01-brutos, cria o projeto no kit, transcreve, acha as pausas e imprime as frases com o tempo de cada palavra. Gera a folha de quadros em video-projects\<nome-curto>\jeito2\folha.png (1 por segundo, grade de 100 px).
+   - Só funciona com vídeo em pé (1080x1920 ou proporção 9:16, sem rotação estranha) e uma gravação só. Se não for assim, use o "Jeito antigo" abaixo.
+2. Plano (você, uma vez só): leia a saída do passo 1 e olhe a folha.png UMA vez. Escreva video-projects\<nome-curto>\jeito2\plano.json:
+   ```json
+   {
+     "slug": "<nome-curto>", "formato": "destampando",
+     "verbo": "GRAVE", "etiqueta": null,
+     "manter": [[2.85, 7.33], [12.88, 17.55]],
+     "zoom": 1.0, "queixo_max_px": 1030, "contorno": false, "sons": true,
+     "pares": [{ "nunca": "Se apresentando", "certo": "Pelo problema", "t_nunca": 3.74, "t_certo": 5.92 }],
+     "cta": { "frase": "Segue pra mais dicas de gravação", "t": 30.64 },
+     "legenda_post": "..."
+   }
+   ```
+   - `manter`: trechos do bruto que ficam (tempo do bruto), em ordem. Dentro deles o código já tira sozinho as pausas acima de 0,2 s. Deixe de fora o começo e o fim sem fala, as tentativas repetidas (fica a última boa) e o que estiver entre os pares sem fala.
+   - `verbo`: o da fala, em maiúsculas (DIGA, USE, FAÇA, COMPRE, GRAVE...). `etiqueta`: texto ou null (ver Etapa 1).
+   - `queixo_max_px`: o ponto mais baixo do queixo/barba nos trechos que ficam, medido na grade da folha (a folha está em 1/5 do tamanho: cada quadrado vermelho é 100 px). Os títulos vão 50 px abaixo disso. `zoom` 1.0 (só aumente, até 1.1, se a pessoa estiver muito longe e o bloco ainda couber).
+   - `contorno`: true se a roupa tiver estampa ou cor clara atrás das linhas.
+   - `pares`: um por linha, na ordem da fala. Texto de cada célula com no máximo 3 palavras e ATÉ 15 LETRAS (textos maiores deixam a letra pequena e as colunas encostam). `t_nunca` e `t_certo`: tempo do bruto em que a pessoa começa a falar o item (ver "Lendo os pares da fala").
+   - `cta`: frase geral (nunca @ nem nome de perfil) e o tempo do bruto do "segue"; null se não tiver CTA. `sons`: false se o usuário pedir sem efeitos.
+3. Montar (código): `node destampando.mjs <nome-curto>`
+   - Corta, mixa os sons (pá, whoosh, blim e toque, com volumes fixos), monta o index.html pelo modelo, roda o lint, renderiza o rascunho e gera jeito2\revisao.png com os quadros principais (tudo tampado, cada tarja saindo, CTA, fim). Se aparecer AVISO, corrija o plano e rode de novo.
+4. Revisar (você, uma vez): olhe a revisao.png UMA vez e confira a regra do rosto, a legibilidade, o texto certo em cada célula, as tarjas saindo na hora certa e o CTA. Se algo estiver errado, corrija o plano.json (e só ele) e repita o passo 3.
+5. Entregar (código): `node destampando.mjs <nome-curto> --final`
+   - Renderiza em alta, tira os metadados, salva em 02-finais como <nome-curto>-vN.mp4 e grava a tabela dos pares e a legenda em 03-roteiros\<nome-curto>.md.
+6. Mande a mensagem de "Entrega".
+
+Se algum script der erro que não seja do plano, explique em linguagem simples e, se precisar, termine pelo Jeito antigo.
+
+## Jeito antigo (reserva): edição em 9 passos
+Só quando o Jeito 2 não der conta (vídeo deitado ou com rotação, mais de uma gravação, layout fora do padrão ou erro nos scripts). Crie uma lista de tarefas com os 9 passos e vá marcando.
 
 1. Analisar o vídeo bruto
    - Ler duração, resolução, formato e rotação com o FFmpeg (ffprobe). Vídeo de iPhone costuma vir com rotação: confira se a saída fica em pé.
